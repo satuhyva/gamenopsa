@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import SetUpNewGame from './setupGame/SetUpNewGame'
 import Game from './game/Game'
@@ -7,12 +7,20 @@ import Game from './game/Game'
 
 const NopsaGame = (props) => {
     return (
+        // <View>
+        //     {!props.game.gameIsOn ?
+        //         <SetUpNewGame/>
+        //         :
+        //         <Game/>
+        //     }
+        // </View>
         <View>
-            {!props.game.gameIsOn ?
-                <SetUpNewGame/>
-                :
-                <Game/>
-            }
+            <Text>++++++++++++</Text>
+            <Text>----------</Text>
+            <Text>........</Text>
+            <Text>ööööööö</Text>
+            <Text>====ppppppppppppppppppp=</Text>
+            <Text>wwwwww</Text>
         </View>
     )
 }

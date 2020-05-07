@@ -9,31 +9,31 @@ import rootReducer from './reducers/rootReducer'
 
 const store = createStore(rootReducer)
 
-// const App = () => {
-//     return (
-//         <Provider store={store}>
-//             <NopsaGame/>
-//         </Provider>
-//     )
-// }
-
-// export default App
-
-
 const App = () => {
     return (
-        <View>
-            <Text>++++++++++++</Text>
-            <Text>----------</Text>
-            <Text>........</Text>
-            <Text>ööööööö</Text>
-            <Text>====ppppppppppppppppppp=</Text>
-            <Text>wwwwww</Text>
-        </View>
+        <Provider store={store}>
+            <NopsaGame/>
+        </Provider>
     )
 }
 
 export default App
+
+
+// const App = () => {
+//     return (
+//         <View>
+//             <Text>++++++++++++</Text>
+//             <Text>----------</Text>
+//             <Text>........</Text>
+//             <Text>ööööööö</Text>
+//             <Text>====ppppppppppppppppppp=</Text>
+//             <Text>wwwwww</Text>
+//         </View>
+//     )
+// }
+
+// export default App
 
 
 
