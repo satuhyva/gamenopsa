@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import Game from './game/Game'
+import SetUpGame from './setup/SetUpGame'
 
 
 
@@ -9,10 +10,10 @@ const GameOfNopsa = (props) => {
     const isOn = props.game.gameIsOn
     return (
         <View>
-            {!isOn ?
-                <Game></Game>
+            {isOn ?
+                <Game/>
                 :
-                <Text>on</Text>
+                <SetUpGame/>
             }
         </View>
     )
