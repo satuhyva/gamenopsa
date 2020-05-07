@@ -16,6 +16,7 @@ const App = () => {
             <View>
                 <Text>popopopopopopop</Text>
                 <Game></Game>
+                <NopsaGame></NopsaGame>
             </View>
         </Provider>
     )
