@@ -13,7 +13,8 @@ const App = () => {
     return (
         <Provider store={store}>
             <View>
-              <Text>popopopopopopop</Text>
+                <Text>popopopopopopop</Text>
+                <NopsaGame/>
             </View>
         </Provider>
     )
