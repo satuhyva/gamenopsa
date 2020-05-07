@@ -7,10 +7,12 @@ import Game from './game/Game'
 
 const NopsaGame = (props) => {
     console.log(props.game)
+    const arvo = props.game.isOn
     return (
         <View>
             <Text>nopsa game</Text>
             <Text>muutos</Text>
+            <Text>{arvo ? 'totta' : 'valhetta'}</Text>
         </View>
     )
 }
