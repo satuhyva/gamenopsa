@@ -3,9 +3,7 @@ import React from 'react'
 import { View, Dimensions,  StyleSheet, Text } from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import NopsaGame from './components/NopsaGame'
 import rootReducer from './reducers/rootReducer'
-import Game from './components/game/Game'
 
 
 const store = createStore(rootReducer)
@@ -15,8 +13,7 @@ const App = () => {
         <Provider store={store}>
             <View>
                 <Text>popopopopopopop</Text>
-                <Game></Game>
-                <NopsaGame></NopsaGame>
+
             </View>
         </Provider>
     )
