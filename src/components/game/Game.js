@@ -6,13 +6,9 @@ import { connect } from 'react-redux'
 
 const Game = (props) => {
 
-    const screenWidth = Dimensions.get('window').width
-    const screenHeight = Dimensions.get('window').height
-
     return (
         <View>
             <Text>gameeeeeeee</Text>
-            <Text>{screenWidth.toString()}</Text>
         </View>
     )
 }
