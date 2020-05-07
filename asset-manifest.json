@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/gamenopsa/static/js/main.be0510d9.chunk.js",
-    "main.js.map": "/gamenopsa/static/js/main.be0510d9.chunk.js.map",
+    "main.js": "/gamenopsa/static/js/main.366aaaf7.chunk.js",
+    "main.js.map": "/gamenopsa/static/js/main.366aaaf7.chunk.js.map",
     "runtime-main.js": "/gamenopsa/static/js/runtime-main.5995c17c.js",
     "runtime-main.js.map": "/gamenopsa/static/js/runtime-main.5995c17c.js.map",
-    "static/js/2.7f8a7749.chunk.js": "/gamenopsa/static/js/2.7f8a7749.chunk.js",
-    "static/js/2.7f8a7749.chunk.js.map": "/gamenopsa/static/js/2.7f8a7749.chunk.js.map",
+    "static/js/2.eabe0d80.chunk.js": "/gamenopsa/static/js/2.eabe0d80.chunk.js",
+    "static/js/2.eabe0d80.chunk.js.map": "/gamenopsa/static/js/2.eabe0d80.chunk.js.map",
     "index.html": "/gamenopsa/index.html",
-    "precache-manifest.1dcbad5d6053f0e998ed55facf061de1.js": "/gamenopsa/precache-manifest.1dcbad5d6053f0e998ed55facf061de1.js",
+    "precache-manifest.ccb4836fc1a40d71cf2ab1a7b5d94fbe.js": "/gamenopsa/precache-manifest.ccb4836fc1a40d71cf2ab1a7b5d94fbe.js",
     "service-worker.js": "/gamenopsa/service-worker.js",
-    "static/js/2.7f8a7749.chunk.js.LICENSE.txt": "/gamenopsa/static/js/2.7f8a7749.chunk.js.LICENSE.txt"
+    "static/js/2.eabe0d80.chunk.js.LICENSE.txt": "/gamenopsa/static/js/2.eabe0d80.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.5995c17c.js",
-    "static/js/2.7f8a7749.chunk.js",
-    "static/js/main.be0510d9.chunk.js"
+    "static/js/2.eabe0d80.chunk.js",
+    "static/js/main.366aaaf7.chunk.js"
   ]
 }
