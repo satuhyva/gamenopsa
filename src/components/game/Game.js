@@ -8,7 +8,7 @@ const Game = (props) => {
 
     return (
         <View>
-            <Text>gameeeeeeee</Text>
+            <Text>GAME</Text>
         </View>
     )
 }

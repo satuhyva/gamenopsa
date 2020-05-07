@@ -18,8 +18,11 @@ const SetUpGame = (props) => {
     const styles = getStyles(screenWidth, screenHeight)
 
     return (
-        <View >
-            <Text>huhuuu SETUPPOII</Text>
+        <View style={styles.screen}>
+            <View style={styles.titleView}>
+                <Text style={styles.titleText}>nopsa</Text>
+                <Text style={styles.infoText}>a card game for those with skill, speed and luck</Text>
+            </View>
         </View>
     )
 }
@@ -47,21 +50,21 @@ const getStyles = (screenWidth, screenHeight) => {
             height: screenHeight,
             backgroundColor: 'green',
         },
-        // titleView: {
-        //     height: screenWidth / 10,
-        //     alignItems: 'center',
-        // },
-        // titleText: {
-        //     fontSize: screenWidth / 10,
-        //     fontWeigth: 'bold',
-        //     color: '#B9CC3F',
-        //     fontFamily: 'Arial Black',
-        // },
-        // infoText: {
-        //     fontSize: screenWidth / 20,
-        //     color: '#B9CC3F',
-        //     fontFamily: 'Arial',
-        // },
+        titleView: {
+            height: screenWidth / 10,
+            alignItems: 'center',
+        },
+        titleText: {
+            fontSize: screenWidth / 10,
+            fontWeigth: 'bold',
+            color: '#B9CC3F',
+            fontFamily: 'Arial Black',
+        },
+        infoText: {
+            fontSize: screenWidth / 20,
+            color: '#B9CC3F',
+            fontFamily: 'Arial',
+        },
     })
 }
 
