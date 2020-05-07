@@ -6,9 +6,11 @@ import Game from './game/Game'
 
 
 const NopsaGame = (props) => {
+    console.log(props.game)
     return (
         <View>
             <Text>nopsa game</Text>
+            <Text>muutos</Text>
         </View>
     )
 }
