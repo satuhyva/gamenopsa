@@ -12,7 +12,9 @@ const store = createStore(rootReducer)
 const App = () => {
     return (
         <Provider store={store}>
-            <NopsaGame/>
+            <View>
+              <Text>popopopopopopop</Text>
+            </View>
         </Provider>
     )
 }

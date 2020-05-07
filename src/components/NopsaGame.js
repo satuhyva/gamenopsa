@@ -18,9 +18,7 @@ const NopsaGame = (props) => {
             <Text>++++++++++++</Text>
             <Text>----------</Text>
             <Text>........</Text>
-            <Text>ööööööö</Text>
-            <Text>====ppppppppppppppppppp=</Text>
-            <Text>wwwwww</Text>
+
         </View>
     )
 }
