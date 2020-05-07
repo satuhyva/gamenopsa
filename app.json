@@ -1,0 +1,11 @@
+{
+    "expo": {
+      "sdkVersion": "31.0.0",
+      "name": "nopsa game",
+      "slug": "nopsa game",
+      "version": "0.1.0",
+      "description": "A cards game named nopsa",
+      "primaryColor": "#ff8179"
+    }
+  }
+  

@@ -2,22 +2,73 @@
   "name": "gamenopsa",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://satuhyva.github.io/gamenopsa",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "expo": "^37.0.8",
+    "expo-cli": "^3.20.1",
+    "g": "^2.0.1",
+    "gh-pages": "^2.2.0",
     "react": "^16.13.1",
+    "react-art": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-native": "^0.62.2",
+    "react-native-web": "^0.12.2",
     "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-web": "react-scripts start",
+    "build-web": "react-scripts build",
+    "test-web": "react-scripts test",
+    "eject-web": "react-scripts eject",
+    "start-native": "expo start",
+    "android": "expo android",
+    "ios": "expo ios",
+    "build:ios": "expo build:ios",
+    "build:android": "expo build:android",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "prettier": 0,
+      "indent": [
+        "error",
+        4
+      ],
+      "semi": [
+        "error",
+        "never"
+      ],
+      "eqeqeq": "error",
+      "no-trailing-spaces": "error",
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "arrow-spacing": [
+        "error",
+        {
+          "before": true,
+          "after": true
+        }
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ]
+    }
   },
   "browserslist": {
     "production": [
@@ -30,5 +81,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx-source": "^6.22.0",
+    "babel-preset-expo": "^8.1.0"
   }
 }
