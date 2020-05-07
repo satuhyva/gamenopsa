@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 
 
@@ -8,7 +8,7 @@ const Game = (props) => {
 
     return (
         <View>
-
+            <Text>game</Text>
         </View>
     )
 }

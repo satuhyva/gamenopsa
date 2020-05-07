@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import NopsaGame from './components/NopsaGame'
 import rootReducer from './reducers/rootReducer'
+import Game from './components/game/Game'
 
 
 const store = createStore(rootReducer)
@@ -14,7 +15,7 @@ const App = () => {
         <Provider store={store}>
             <View>
                 <Text>popopopopopopop</Text>
-                <NopsaGame/>
+                <Game></Game>
             </View>
         </Provider>
     )
