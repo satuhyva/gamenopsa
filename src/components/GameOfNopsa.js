@@ -10,7 +10,7 @@ const GameOfNopsa = (props) => {
     const isOn = props.game.gameIsOn
     return (
         <View>
-            {!isOn ?
+            {isOn ?
                 <Game/>
                 :
                 <SetUpGame/>
