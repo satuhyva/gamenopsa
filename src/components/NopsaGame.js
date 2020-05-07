@@ -15,7 +15,7 @@ const NopsaGame = (props) => {
 
 
 
-export default NopsaGame
+// export default NopsaGame
 
 // import React from 'react'
 // import { View, Text } from 'react-native'
@@ -36,18 +36,18 @@ export default NopsaGame
 //     )
 // }
 
-// const mapStateToProps = state => {
-//     return {
-//         game: state.game,
-//     }
-// }
+const mapStateToProps = state => {
+    return {
+        game: state.game,
+    }
+}
 
-// const mapDispatchToProps = {
-// }
+const mapDispatchToProps = {
+}
 
-// const ConnectedNopsaGame = connect(mapStateToProps, mapDispatchToProps)(NopsaGame)
+const ConnectedNopsaGame = connect(mapStateToProps, mapDispatchToProps)(NopsaGame)
 
-// export default ConnectedNopsaGame
+export default ConnectedNopsaGame
 
 
 
