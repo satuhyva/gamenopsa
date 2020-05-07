@@ -1,0 +1,35 @@
+import React from 'react'
+import { View, Text } from 'react-native'
+import { connect } from 'react-redux'
+
+
+
+const GameOfNopsa = (props) => {
+    const isOn = props.game.gameIsOn
+    return (
+        <View>
+            {!isOn ?
+                <Text>ei ole</Text>
+                :
+                <Text>on</Text>
+            }
+        </View>
+    )
+}
+
+const mapStateToProps = state => {
+    return {
+        game: state.game,
+    }
+}
+
+const mapDispatchToProps = {
+}
+
+const ConnectedGameOfNopsa = connect(mapStateToProps, mapDispatchToProps)(GameOfNopsa)
+
+export default ConnectedGameOfNopsa
+
+
+
+
