@@ -7,7 +7,9 @@ import SetUpGame from './setup/SetUpGame'
 
 
 const GameOfNopsa = (props) => {
+
     const isOn = props.game.gameIsOn
+
     return (
         <View>
             {isOn ?
