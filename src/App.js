@@ -13,6 +13,7 @@ const App = () => {
     return (
         <Provider store={store}>
             <NopsaGame/>
+            <Text>435345545454353454353</Text>
         </Provider>
     )
 }
