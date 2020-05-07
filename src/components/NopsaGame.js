@@ -16,20 +16,31 @@ import Game from './game/Game'
 //         </View>
 //     )
 // }
-
-
 const NopsaGame = (props) => {
     const gameIsOn = props.game.gameIsOn
     return (
         <View>
             {!gameIsOn ?
-                <SetUpNewGame/>
+                <Text>blaah</Text>
                 :
-                <Game/>
+                <Text>zzzzzzz</Text>
             }
         </View>
     )
 }
+
+// const NopsaGame = (props) => {
+//     const gameIsOn = props.game.gameIsOn
+//     return (
+//         <View>
+//             {!gameIsOn ?
+//                 <SetUpNewGame/>
+//                 :
+//                 <Game/>
+//             }
+//         </View>
+//     )
+// }
 
 const mapStateToProps = state => {
     return {
