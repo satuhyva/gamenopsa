@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { View, Dimensions,  StyleSheet, Text } from 'react-native'
+import { View, Dimensions,  StyleSheet,  Text } from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import rootReducer from './reducers/rootReducer'
