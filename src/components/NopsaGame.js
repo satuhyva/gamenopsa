@@ -21,7 +21,7 @@ const NopsaGame = (props) => {
     return (
         <View>
             {!gameIsOn ?
-                <Text>blaah</Text>
+                <SetUpNewGame></SetUpNewGame>
                 :
                 <Text>zzzzzzz</Text>
             }
