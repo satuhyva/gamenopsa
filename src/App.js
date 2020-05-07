@@ -7,34 +7,33 @@ import NopsaGame from './components/NopsaGame'
 import rootReducer from './reducers/rootReducer'
 
 
-const store = createStore(rootReducer)
-
-const App = () => {
-    return (
-        <Provider store={store}>
-            <NopsaGame/>
-            <Text>435345545454353454353</Text>
-        </Provider>
-    )
-}
-
-export default App
-
+// const store = createStore(rootReducer)
 
 // const App = () => {
 //     return (
-//         <View>
-//             <Text>++++++++++++</Text>
-//             <Text>----------</Text>
-//             <Text>........</Text>
-//             <Text>ööööööö</Text>
-//             <Text>====ppppppppppppppppppp=</Text>
-//             <Text>wwwwww</Text>
-//         </View>
+//         <Provider store={store}>
+//             <NopsaGame/>
+//         </Provider>
 //     )
 // }
 
 // export default App
+
+
+const App = () => {
+    return (
+        <View>
+            <Text>++++++++++++</Text>
+            <Text>----------</Text>
+            <Text>........</Text>
+            <Text>ööööööö</Text>
+            <Text>====ppppppppppppppppppp=</Text>
+            <Text>wwwwww</Text>
+        </View>
+    )
+}
+
+export default App
 
 
 
