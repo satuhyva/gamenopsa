@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "753a419b9a823677c75ea5590d395755",
+    "revision": "6816469a62fea0e7c4c9b6cdfc6abd69",
     "url": "/gamenopsa/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gamenopsa/static/js/2.eabe0d80.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4a175641c6c02c929b22",
-    "url": "/gamenopsa/static/js/main.ab5f9f53.chunk.js"
+    "revision": "9d6bc6af48fdee8454d7",
+    "url": "/gamenopsa/static/js/main.23ad2e98.chunk.js"
   },
   {
     "revision": "a280dce322faa66dea8b",
