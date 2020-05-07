@@ -23,12 +23,12 @@ import { View, Dimensions,  StyleSheet, Text } from 'react-native'
 const App = () => {
     return (
         <View>
+            <Text>++++++++++++</Text>
             <Text>HUHUUUUUUUUU</Text>
-            <Text>HUHUUUUUUUUU</Text>
-            <Text>HUHUUUUUUUUU</Text>
-            <Text>HUHUUUUUUUUU</Text>
-            <Text>HUHUUUUUUUUU</Text>
-            <Text>HUHUUUUUUUUU</Text>
+            <Text>........</Text>
+            <Text>ööööööö</Text>
+            <Text>===============</Text>
+            <Text>wwwwww</Text>
         </View>
     )
 }
