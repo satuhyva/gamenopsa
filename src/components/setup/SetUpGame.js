@@ -17,7 +17,6 @@ const SetUpGame = () => {
         setSettingNew(true)
     }
 
-
     return (
         <View style={styles.screen}>
             {settingNew ?

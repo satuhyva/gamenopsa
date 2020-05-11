@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, TouchableOpacity,  StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { setGameSettings } from '../../reducers/gameReducer'
 import DottedSlider from './DottedSlider'
+import StackSelection from './StackSelection'
 
 
 const SelectionView = (props) => {
@@ -12,9 +13,12 @@ const SelectionView = (props) => {
 
     const referenceSkill = React.createRef()
     const referenceSpeed = React.createRef()
+    const referenceStack = React.createRef()
 
     const saveSelectedSettings = () => {
         console.log('referenceSkill', referenceSkill.current.getSelectedValue())
+        console.log('referenceSpeed', referenceSpeed.current.getSelectedValue())
+        console.log('referenceStack', referenceStack.current.getSelectedStack())
     }
 
 
@@ -32,6 +36,12 @@ const SelectionView = (props) => {
                 optionCount={5}
                 ref={referenceSpeed}
             />
+            <Text style={styles.instructionText}>select your stack</Text>
+            <StackSelection
+                scaleUnit={scaleUnit}
+                ref={referenceStack}
+            />
+            <View style={styles.spacer}></View>
             <TouchableOpacity onPress={saveSelectedSettings} style={styles.buttonView}>
                 <Text style={styles.buttonText}>save settings</Text>
             </TouchableOpacity>
