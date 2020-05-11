@@ -1,45 +1,35 @@
-import React from 'react'
-import { View, Dimensions,  StyleSheet, Text } from 'react-native'
-import { connect } from 'react-redux'
-import { setGameSettings } from '../../reducers/gameReducer'
+import React, { useState } from 'react'
+import { View, Dimensions,  StyleSheet } from 'react-native'
+import WelcomeView from './WelcomeView'
+import SelectionView from './SelectionView'
 
 
-
-const SetUpGame = (props) => {
+const SetUpGame = () => {
 
     const screenWidth = Dimensions.get('window').width
     const screenHeight = Dimensions.get('window').height
-    // const cardWidthIfScreenWidthIsUsed = screenWidth / 6
-    // const cardWidthIfScreenHeightIsUsed = screenHeight / ((0.5 + 1 + 0.75 + 1 + 0.75 + 1.5 + 0.5) * 1.7)
-    // const cardWidth = Math.min(cardWidthIfScreenWidthIsUsed, cardWidthIfScreenHeightIsUsed)
-    // const cardHeight = 1.7 * cardWidth
-    // const spacing = (screenWidth - 6 * cardWidth) / 2
+    const scaleUnit = Math.min(screenWidth / 6, screenHeight /(6 * 1.7))
 
     const styles = getStyles(screenWidth, screenHeight)
+    const [settingNew, setSettingNew] = useState(false)
+
+    const startSettingUpNewGame = () => {
+        setSettingNew(true)
+    }
+
 
     return (
         <View style={styles.screen}>
-            <View style={styles.titleView}>
-                <Text style={styles.titleText}>nopsa</Text>
-                <Text style={styles.infoText}>a card game for those with skill, speed and luck</Text>
-            </View>
+            {settingNew ?
+                <SelectionView  scaleUnit={scaleUnit}/>
+                :
+                <WelcomeView startSetting={startSettingUpNewGame} scaleUnit={scaleUnit}/>
+            }
         </View>
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        game: state.game,
-    }
-}
-
-const mapDispatchToProps = {
-    setGameSettings,
-}
-
-const ConnectedSetUpGame = connect(mapStateToProps, mapDispatchToProps)(SetUpGame)
-
-export default ConnectedSetUpGame
+export default SetUpGame
 
 
 const getStyles = (screenWidth, screenHeight) => {
@@ -49,21 +39,6 @@ const getStyles = (screenWidth, screenHeight) => {
             width: screenWidth,
             height: screenHeight,
             backgroundColor: 'green',
-        },
-        titleView: {
-            height: screenWidth / 10,
-            alignItems: 'center',
-        },
-        titleText: {
-            fontSize: screenWidth / 10,
-            fontWeigth: 'bold',
-            color: '#B9CC3F',
-            fontFamily: 'Arial Black',
-        },
-        infoText: {
-            fontSize: screenWidth / 20,
-            color: '#B9CC3F',
-            fontFamily: 'Arial',
         },
     })
 }

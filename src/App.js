@@ -1,6 +1,5 @@
 
 import React from 'react'
-import { View, Dimensions,  StyleSheet,  Text } from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import rootReducer from './reducers/rootReducer'
@@ -17,49 +16,3 @@ const App = () => {
 }
 
 export default App
-
-
-// const App = () => {
-//     return (
-//         <View>
-//             <Text>++++++++++++</Text>
-//             <Text>----------</Text>
-//             <Text>........</Text>
-//             <Text>ööööööö</Text>
-//             <Text>====ppppppppppppppppppp=</Text>
-//             <Text>wwwwww</Text>
-//         </View>
-//     )
-// }
-
-// export default App
-
-
-
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           xxxxxxxxxx   Edit <code>src/App.js</code> and save to reload.
-//         </p>
-        
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
