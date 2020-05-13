@@ -42,9 +42,6 @@ const getStyles = (scaleUnit) => {
             alignItems: 'center',
             marginTop: scaleUnit / 2,
         },
-        titleView: {
-            alignItems: 'center',
-        },
         titleText: {
             fontSize: scaleUnit / 1.5,
             fontWeigth: 'bold',

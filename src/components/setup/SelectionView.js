@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, TouchableOpacity,  StyleSheet, Text } from 'react-native'
+import { View, TouchableOpacity, Animated, StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { setGameSettings } from '../../reducers/gameReducer'
 import DottedSlider from './DottedSlider'
 import StackSelection from './StackSelection'
+import { createStacks } from './createStacks.js'
 
 
 const SelectionView = (props) => {
@@ -15,15 +16,29 @@ const SelectionView = (props) => {
     const referenceSpeed = React.createRef()
     const referenceStack = React.createRef()
 
+    const visibility = new Animated.Value(1)
+    const animatedVisibility = { opacity: visibility }
+
     const saveSelectedSettings = () => {
-        console.log('referenceSkill', referenceSkill.current.getSelectedValue())
-        console.log('referenceSpeed', referenceSpeed.current.getSelectedValue())
-        console.log('referenceStack', referenceStack.current.getSelectedStack())
+        Animated.timing(visibility, {
+            toValue: 0, duration: 1000,
+        }).start()
+        const stacks = createStacks()
+        setTimeout(() => {
+            props.setGameSettings({
+                skill: referenceSkill.current.getSelectedValue(),
+                speed: referenceSpeed.current.getSelectedValue(),
+                playerStack: stacks[referenceStack.current.getSelectedStack().player],
+                computerStack : stacks[referenceStack.current.getSelectedStack().computer],
+                isOn: true,
+            })
+        }, 1000)
+
     }
 
 
     return (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, animatedVisibility]}>
             <Text style={styles.instructionText}>select opponent skill level</Text>
             <DottedSlider
                 scaleUnit={scaleUnit}
@@ -45,7 +60,7 @@ const SelectionView = (props) => {
             <TouchableOpacity onPress={saveSelectedSettings} style={styles.buttonView}>
                 <Text style={styles.buttonText}>save settings</Text>
             </TouchableOpacity>
-        </View>
+        </Animated.View>
     )
 }
 

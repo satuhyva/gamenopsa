@@ -5,6 +5,7 @@ import LargeDot from './LargeDot'
 
 
 
+
 const DottedSlider = React.forwardRef((props, ref) => {
 
     const scaleUnit = props.scaleUnit
