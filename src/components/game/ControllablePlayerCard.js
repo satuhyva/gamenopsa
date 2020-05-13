@@ -6,16 +6,18 @@ import { getPlayerCardLocationAfterDealing, getPlayerCardStartLocation, getCardF
 
 const ControllablePlayerCard = React.forwardRef((props, ref) => {
 
-    const [isDraggableCard, setIsDraggableCard] = useState(false)
-    const locationAtStart = getPlayerCardStartLocation(props.scaleUnit, props.spacing)
-    const locationAfterDealing = getPlayerCardLocationAfterDealing(props.index, props.scaleUnit, props.spacing, props.cardCount)
-    const cardWillFlipAfterDealing = getCardFlipStateAfterDealing(props.index, props.cardCount)
+    const [cardState, setCardState] = useState('movable')
+    const [locationAtStart] = useState(getPlayerCardStartLocation(props.scaleUnit, props.spacing))
+    const [locationAfterDealing] = useState(getPlayerCardLocationAfterDealing(props.index, props.scaleUnit, props.spacing, props.cardCount))
+    const [cardWillFlipAfterDealing] = useState(getCardFlipStateAfterDealing(props.index, props.cardCount))
 
-    const convertToDraggableCard = () => {
-        setIsDraggableCard(true)
+    const convertCardState = (newState) => {
+        setCardState(newState)
     }
 
-    if (isDraggableCard) {
+    if (cardState === 'null') {
+        return null
+    } else if (cardState === 'draggable') {
         return (
             <DraggableCard
                 card={props.card}
@@ -35,7 +37,7 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
                 card={props.card}
                 endLocation={locationAfterDealing}
                 flip={cardWillFlipAfterDealing}
-                convertToDraggableCard={convertToDraggableCard}
+                convertCardState={convertCardState}
             />
         )
     }

@@ -1,6 +1,7 @@
 import React, { useState, useImperativeHandle } from 'react'
 import { View } from 'react-native'
 import ControllablePlayerCard from './ControllablePlayerCard'
+import { toLeftOrRightGameStackInSingleCardDealing } from './helperFunctions.js'
 
 
 const PlayerCards = React.forwardRef((props, ref) => {
@@ -20,8 +21,14 @@ const PlayerCards = React.forwardRef((props, ref) => {
         if (indexDealNext < props.playerCards.length) {
             cardReferences[indexDealNext].current.moveAndPossiblyFlip()
             setTimeout(() => {
+                const toWhichStack = toLeftOrRightGameStackInSingleCardDealing(indexDealNext, playerCards.length)
+                if (toWhichStack === 'right')  {
+                    props.changeTopmostRight(playerCards[indexDealNext])
+                } else {
+                    props.changeTopmostLeft(playerCards[indexDealNext])
+                }
                 setIndexDealNext(indexDealNext + 1)
-            }, 2000)
+            }, 1600)
         }
     }
 

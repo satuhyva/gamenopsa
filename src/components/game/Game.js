@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PlayerCards from './PlayerCards'
+import CommonGameStacks from './CommonGameStacks'
 
 
 const Game = (props) => {
 
+    const [topmostLeft, setTopmostLeft] = useState('')
+    const [topmostRight, setTopmostRight] = useState('')
     const [playerCards] = useState(props.game.playerStack)
     const referencePlayerCards = React.createRef()
 
@@ -16,14 +19,29 @@ const Game = (props) => {
         referencePlayerCards.current.dealSingleCard()
     }
 
+    const changeTopmostRight = (card) => {
+        setTopmostRight(card)
+    }
+    const changeTopmostLeft = (card) => {
+        console.log('changeTopmostLeft')
+    }
+
 
     return (
         <View>
+            <CommonGameStacks
+                topmostLeft={topmostLeft}
+                topmostRight={topmostRight}
+                scaleUnit={props.scaleUnit}
+                spacing={props.spacing}
+            />
             <PlayerCards
                 playerCards={playerCards}
                 ref={referencePlayerCards}
                 scaleUnit={props.scaleUnit}
                 spacing={props.spacing}
+                changeTopmostRight={changeTopmostRight}
+                changeTopmostLeft={changeTopmostLeft}
             />
             <TouchableOpacity onPress={dealSolitaireCards} >
                 <Text >deal solitaire</Text>
@@ -51,50 +69,3 @@ const ConnectedGame = connect(mapStateToProps, mapDispatchToProps)(Game)
 export default ConnectedGame
 
 
-
-// console.log('props', props)
-
-// const [some, setSome] = useState(true)
-// const [show, setShow] = useState(true)
-
-// const refMove = React.createRef()
-// const flippaatms = () => {
-//     refMove.current.moveToNewLocation({ x: 100, y: 200 })
-// }
-// const move2 = () => {
-//     refMove.current.moveToNewLocation({ x: 100, y: 350 })
-// }
-// const flipInside = () => {
-//     refMove.current.flip()
-//     setTimeout(() => {
-//         setShow(false)
-//     }, 1000)
-// }
-
-
-
-// {/* <MovableFlippableCard
-//     ref={refMove}
-//     scaleUnit={props.scaleUnit}
-//     startLocation={{ x: 0, y: 0 }}
-// /> */}
-
-// {/* <DraggableCard
-//     card={{ suit: 2, value: 3 }}
-//     size={props.scaleUnit}
-//     startLocation={{ x: 0, y: 0 }}
-// /> */}
-
-
-
-// {/* <View>
-//     <TouchableOpacity onPress={flippaatms} >
-//         <Text >flippaatms</Text>
-//     </TouchableOpacity>
-//     <TouchableOpacity onPress={move2} >
-//         <Text >move2</Text>
-//     </TouchableOpacity>
-//     <TouchableOpacity onPress={flipInside} >
-//         <Text >flipInside</Text>
-//     </TouchableOpacity>
-// </View> */}

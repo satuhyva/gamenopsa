@@ -13,6 +13,7 @@ const moveToNewLocation = (animatedMove, startLocation, delay, newLocation) => {
 }
 
 
+
 const MovableFlippableCard = React.forwardRef((props, ref) => {
 
     const [animatedMove] = useState(new Animated.ValueXY())
@@ -42,9 +43,10 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
         <Animated.View style={[animatedMoveStyle, { position: 'absolute', left: startLocation.x, top: startLocation.y }]}>
             <FlippableCard
                 ref={referenceFlip}
+                index={props.index}
                 card={props.card}
                 size={props.scaleUnit}
-                convertToDraggableCard={props.convertToDraggableCard}
+                convertCardState={props.convertCardState}
             />
         </Animated.View>
     )

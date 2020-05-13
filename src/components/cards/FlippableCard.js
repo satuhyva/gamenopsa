@@ -44,9 +44,10 @@ const FlippableCard = React.forwardRef((props, ref) => {
 
 
     const flip = () => {
+        const newState = props.index > 14 ? 'null' : 'draggable'
         performFlipAnimations(animatedFlipBackside, animatedFlipFrontside)
         setTimeout(() => {
-            props.convertToDraggableCard()
+            props.convertCardState(newState)
         }, 600)
     }
 
