@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Animated, PanResponder, TouchableOpacity } from 'react-native'
 import CardFront from './CardFront'
+import { whatStackWasReleasedOn, valueIsOKforPlacingOntoStack } from '../game/helperFunctions.js'
 
 
 const getCardStyle = (size) => {
@@ -25,6 +26,23 @@ const moveCardAlongDrag = (dx, dy, animatedDraggable) => {
 }
 
 
+const moveCardToGameStack = (animatedDraggable, side, scaleUnit, spacing, startLocation) => {
+    const newX =  side === 'left' ? (spacing + (1/6 + 1 + 4/6) * scaleUnit) : (spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scaleUnit)
+    const newY = (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit
+    Animated.timing(animatedDraggable, {
+        toValue: { x: newX - startLocation.x, y: newY - startLocation.y }, duration: 500,
+    }).start()
+}
+
+const updateGameStack = (side, changeTopmostLeft, changeTopmostRight, card) => {
+    if (side === 'left') {
+        changeTopmostLeft(card)
+    } else {
+        changeTopmostRight(card)
+    }
+}
+
+
 
 const DraggableCard = React.forwardRef((props, ref) => {
 
@@ -36,6 +54,23 @@ const DraggableCard = React.forwardRef((props, ref) => {
 
 
     const handleReleasedCard = (releaseX, releaseY) => {
+        const whatStackCardWasReleasedOn = whatStackWasReleasedOn(releaseX, releaseY, props.size, props.spacing)
+        if (whatStackCardWasReleasedOn !== 'none') {
+            const valueIsOK = valueIsOKforPlacingOntoStack(whatStackCardWasReleasedOn, props.topmostLeft, props.topmostRight, props.card)
+            if (valueIsOK) {
+                moveCardToGameStack(animatedDraggable, whatStackCardWasReleasedOn, props.size, props.spacing, props.startLocation)
+                setTimeout(() => {
+                    updateGameStack(whatStackCardWasReleasedOn, props.changeTopmostLeft, props.changeTopmostRight, props.card)
+                    props.convertCardState('null')
+                    props.flipPossibleCardBelow(props.index)
+                }, 500)
+            } else {
+                returnCardToStartDragPosition(animatedDraggable)
+            }
+        } else {
+            returnCardToStartDragPosition(animatedDraggable)
+        }
+
         // const wasReleasedOnRight = wasReleasedOnRightGamingPack(releaseX, releaseY, unitWidth, bufferLeft)
         // const valueOkForRight = valueIsSuitable(topmostGamingRight.value, card.value)
         // if (wasReleasedOnRight && valueOkForRight) {
@@ -44,7 +79,6 @@ const DraggableCard = React.forwardRef((props, ref) => {
         //         props.updateRightGamingPack(index)
         //     }, 500)
         // } else {
-        returnCardToStartDragPosition(animatedDraggable)
         // }
 
     }

@@ -123,7 +123,98 @@ const getPlayerCardSolitaireLocation = (cardIndex, scalingUnit, spacing) => {
     return { x: positionX, y: positionY }
 }
 
+export const whatStackWasReleasedOn = (releaseX, releaseY, scaleUnit, spacing) => {
+    const wasReleasedOnLeft = wasReleasedOnLeftStack(releaseX, releaseY, scaleUnit, spacing)
+    const wasReleasedOnRight = wasReleasedOnRightStack(releaseX, releaseY, scaleUnit, spacing)
+    if (wasReleasedOnLeft) {
+        return 'left'
+    } else if (wasReleasedOnRight) {
+        return 'right'
+    } else {
+        return 'none'
+    }
+}
 
-export const getGameStackForDealingSingleCard = (cardIndex, cardCount) => {
+const wasReleasedOnRightStack = (releaseX, releaseY, scaleUnit, spacing) => {
+    const gamingStackRightX = spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scaleUnit
+    const gamingStackRightY = (0.5 + 1.5 + 0.75) * scaleUnit * 1.7
+    if (!(releaseX > gamingStackRightX && releaseX < gamingStackRightX + scaleUnit)) {
+        return false
+    }
+    if (!(releaseY > gamingStackRightY && releaseY < gamingStackRightY + scaleUnit * 1.7)) {
+        return false
+    }
+    return true
+}
 
+const wasReleasedOnLeftStack = (releaseX, releaseY, scaleUnit, spacing) => {
+    const gamingStackLeftX = spacing + (1/6 + 1 + 4/6) * scaleUnit
+    const gamingStackLeftY = (0.5 + 1.5 + 0.75) * scaleUnit * 1.7
+    if (!(releaseX > gamingStackLeftX && releaseX < gamingStackLeftX + scaleUnit)) {
+        return false
+    }
+    if (!(releaseY > gamingStackLeftY && releaseY < gamingStackLeftY + scaleUnit * 1.7)) {
+        return false
+    }
+    return true
+}
+
+
+export const valueIsOKforPlacingOntoStack = (whatStack, topmostLeft, topmostRight, newCard) => {
+    const currentTopmostValue = whatStack === 'left' ? topmostLeft.value : topmostRight.value
+    const newValue = newCard.value
+    if (currentTopmostValue === 1) {
+        if (newValue === 2 || newValue === 13) {
+            return true
+        }
+    } else if (currentTopmostValue === 13) {
+        if (newValue === 12 || newValue === 1) {
+            return true
+        }
+    } else {
+        if (newValue === currentTopmostValue + 1 || newValue === currentTopmostValue - 1) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+export const getIndexOfPossibleCardBelow = (cardIndex) => {
+    let index
+    switch (cardIndex) {
+    case 14:
+        index = 13
+        break
+    case 13:
+        index =  11
+        break
+    case 12:
+        index =  10
+        break
+    case 11:
+        index =  8
+        break
+    case 10:
+        index =  7
+        break
+    case 9:
+        index =  6
+        break
+    case 8:
+        index =  4
+        break
+    case 7:
+        index =  3
+        break
+    case 6:
+        index =  2
+        break
+    case 5:
+        index =  1
+        break
+    default:
+        index =  -1
+    }
+    return index
 }

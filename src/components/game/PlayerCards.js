@@ -1,7 +1,7 @@
 import React, { useState, useImperativeHandle } from 'react'
 import { View } from 'react-native'
 import ControllablePlayerCard from './ControllablePlayerCard'
-import { toLeftOrRightGameStackInSingleCardDealing } from './helperFunctions.js'
+import { toLeftOrRightGameStackInSingleCardDealing, getIndexOfPossibleCardBelow } from './helperFunctions.js'
 
 
 const PlayerCards = React.forwardRef((props, ref) => {
@@ -32,6 +32,11 @@ const PlayerCards = React.forwardRef((props, ref) => {
         }
     }
 
+    const flipPossibleCardBelow = (cardIndex) => {
+        const indexOfCardBelow = getIndexOfPossibleCardBelow(cardIndex)
+        cardReferences[indexOfCardBelow].current.flip()
+    }
+
     useImperativeHandle(ref, () => {
         return { dealSolitaireCards, dealSingleCard }
     })
@@ -49,6 +54,11 @@ const PlayerCards = React.forwardRef((props, ref) => {
                         scaleUnit={props.scaleUnit}
                         spacing={props.spacing}
                         cardCount={playerCards.length}
+                        topmostLeft={props.topmostLeft}
+                        topmostRight={props.topmostRight}
+                        changeTopmostRight={props.changeTopmostRight}
+                        changeTopmostLeft={props.changeTopmostLeft}
+                        flipPossibleCardBelow={flipPossibleCardBelow}
                     />
                 )
             })}

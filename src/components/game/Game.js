@@ -42,6 +42,8 @@ const Game = (props) => {
                 spacing={props.spacing}
                 changeTopmostRight={changeTopmostRight}
                 changeTopmostLeft={changeTopmostLeft}
+                topmostLeft={topmostLeft}
+                topmostRight={topmostRight}
             />
             <TouchableOpacity onPress={dealSolitaireCards} >
                 <Text >deal solitaire</Text>

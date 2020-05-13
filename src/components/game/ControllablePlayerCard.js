@@ -25,6 +25,13 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
                 index={props.index}
                 size={props.scaleUnit}
                 startLocation={locationAfterDealing}
+                topmostLeft={props.topmostLeft}
+                topmostRight={props.topmostRight}
+                changeTopmostRight={props.changeTopmostRight}
+                changeTopmostLeft={props.changeTopmostLeft}
+                spacing={props.spacing}
+                convertCardState={convertCardState}
+                flipPossibleCardBelow={props.flipPossibleCardBelow}
             />
         )
     } else {
