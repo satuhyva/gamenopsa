@@ -181,40 +181,40 @@ export const valueIsOKforPlacingOntoStack = (whatStack, topmostLeft, topmostRigh
 }
 
 export const getIndexOfPossibleCardBelow = (cardIndex) => {
-    let index
-    switch (cardIndex) {
-    case 14:
-        index = 13
-        break
-    case 13:
-        index =  11
-        break
-    case 12:
-        index =  10
-        break
-    case 11:
-        index =  8
-        break
-    case 10:
-        index =  7
-        break
-    case 9:
-        index =  6
-        break
-    case 8:
-        index =  4
-        break
-    case 7:
-        index =  3
-        break
-    case 6:
-        index =  2
-        break
-    case 5:
-        index =  1
-        break
-    default:
-        index =  -1
+    const onTopAndBelowCardIndexPairs = new Map([
+        [14, 13],
+        [13, 11],
+        [12, 10],
+        [11, 8],
+        [10, 7],
+        [9, 6],
+        [8, 4],
+        [7, 3],
+        [6, 2],
+        [5, 1],
+        ['default', -1],
+    ])
+    return onTopAndBelowCardIndexPairs.get(cardIndex) || onTopAndBelowCardIndexPairs.get('default')
+}
+
+
+export const whatEmptyPositionWasReleasedOn = (releaseX, releaseY, scaleUnit, spacing, emptyPositions) => {
+
+    const positionsX = []
+    for (let i = 0; i < 5; i++) {
+        positionsX.push(spacing + (1/6 + i * (1 + 1/6)) * scaleUnit)
     }
-    return index
+    const positionY = (0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * scaleUnit
+
+    let emptyPosition = 'none'
+    for (let i = 0; i < 5; i++) {
+        if (emptyPosition[i]) {
+            if ((releaseX > positionsX[i] && releaseX < positionsX[i] + scaleUnit)) {
+                if ((releaseY > positionY && releaseY < positionY + scaleUnit * 1.7)) {
+                    emptyPosition = i
+                }
+            }
+        }
+    }
+    return emptyPosition
 }

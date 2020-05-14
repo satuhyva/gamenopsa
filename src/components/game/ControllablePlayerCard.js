@@ -32,6 +32,9 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
                 spacing={props.spacing}
                 convertCardState={convertCardState}
                 flipPossibleCardBelow={props.flipPossibleCardBelow}
+                setPlayerCardToPlayed={props.setPlayerCardToPlayed}
+                emptyPositions={props.emptyPositions}
+                handleEmptyPositionStateChanged={props.handleEmptyPositionStateChanged}
             />
         )
     } else {
