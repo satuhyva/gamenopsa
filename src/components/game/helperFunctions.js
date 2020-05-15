@@ -289,3 +289,45 @@ export const getComputerCardSolitaireLocation = (cardIndex, scalingUnit, spacing
     }
     return { x: positionX, y: positionY }
 }
+
+
+export const getVisibleComputerCardsAtStart = (computerCardCount) => {
+    const number = Math.min(15, computerCardCount)
+    let visibleCards = []
+    for (let i = 0; i < number; i++) {
+        const cardFlips = getCardFlipStateAfterDealing(i, computerCardCount)
+        if (cardFlips) {
+            visibleCards.push(i)
+        }
+    }
+    return visibleCards
+}
+
+
+export const getIndexOfCardToMoveAndTargetStack = (computerCards, visibleCardIndexes, topmostLeft, topmostRight) => {
+    let cardAndTarget = { cardIndex: -1, stack: 'none' }
+    let i = 0
+    while (i < visibleCardIndexes.length) {
+        let visibleCard = computerCards[visibleCardIndexes[i]]
+        const leftOK =  valueIsOKforPlacingOntoStack('left', topmostLeft, topmostRight, visibleCard)
+        const rightOK =  valueIsOKforPlacingOntoStack('right', topmostLeft, topmostRight, visibleCard)
+        if (leftOK) {
+            cardAndTarget = { cardIndex: visibleCardIndexes[i], target: 'left' }
+            i = 100
+        } else if (rightOK) {
+            cardAndTarget = { cardIndex: visibleCardIndexes[i], target: 'right' }
+            i = 100
+        }
+        i++
+    }
+    return cardAndTarget
+}
+
+export const getTargetPackLocation = (stack, scaleUnit, spacing) => {
+    console.log('stack, scaleUnit, spacing', stack, scaleUnit, spacing)
+    const locations = new Map([
+        ['left', { x: spacing +(1/6 + 1 + 4/6) * scaleUnit, y: (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit }],
+        ['right', { x: spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scaleUnit, y: (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit }],
+    ])
+    return locations.get(stack)
+}

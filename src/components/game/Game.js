@@ -30,6 +30,10 @@ const Game = (props) => {
         setTopmostLeft(card)
     }
 
+    const computerPlay = () => {
+        referenceComputerCards.current.performComputerCardMoveIfPossible()
+    }
+
 
     return (
         <View>
@@ -65,6 +69,9 @@ const Game = (props) => {
             </TouchableOpacity>
             <TouchableOpacity onPress={dealSingleCards} >
                 <Text  style={{  backgroundColor: 'powderblue' }}>BUTTON deal single card (press after solitaire animations)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={computerPlay} >
+                <Text  style={{  backgroundColor: 'red' }}>BUTTON computer play</Text>
             </TouchableOpacity>
         </View>
     )

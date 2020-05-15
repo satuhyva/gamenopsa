@@ -35,8 +35,17 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
         }
     }
 
+    const moveAndNull = (targetLocation, nullify) => {
+        moveToNewLocation(animatedMove, startLocation, 0, targetLocation)
+        if (nullify) {
+            setTimeout(() => {
+                props.convertCardState('null')
+            }, 1000)
+        }
+    }
+
     useImperativeHandle(ref, () => {
-        return { moveAndPossiblyFlip, flip }
+        return { moveAndPossiblyFlip, flip, moveAndNull }
     })
 
     return (

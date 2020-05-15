@@ -63,6 +63,7 @@ const DraggableCard = React.forwardRef((props, ref) => {
     const dragStyle = { transform: [ { translateX: animatedDraggable.x }, { translateY: animatedDraggable.y }] }
     const [updatedLocation, setUpdatedLocation] = useState({ x: 0, y: 0 })
     const [movedToEmpty, setMovedToEmpty] = useState(false)
+    const [emptyIndexOccupied, setEmptyIndexOccupied] = useState(props.index)
 
 
     const handleReleasedCard = (releaseX, releaseY) => {
@@ -80,7 +81,7 @@ const DraggableCard = React.forwardRef((props, ref) => {
                     props.convertCardState('null')
                     props.setPlayerCardToPlayed(props.index)
                     if (props.index < 5 || movedToEmpty) {
-                        props.handleEmptyPositionStateChanged('vacate', props.index)
+                        props.handleEmptyPositionStateChanged('vacate', emptyIndexOccupied)
                     }
                     if (!movedToEmpty) {
                         props.flipPossibleCardBelow(props.index)
@@ -104,6 +105,7 @@ const DraggableCard = React.forwardRef((props, ref) => {
                     y: startLocation.y - ((0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * props.size),
                 })
                 props.handleEmptyPositionStateChanged('occupy', whatEmptyPositionTheCardWasReleasedOn)
+                setEmptyIndexOccupied(whatEmptyPositionTheCardWasReleasedOn)
             }, 1000)
 
             return

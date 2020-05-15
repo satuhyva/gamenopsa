@@ -1,7 +1,12 @@
 import React, { useState, useImperativeHandle } from 'react'
 import { View } from 'react-native'
 import ControllableComputerCard from './ControllableComputerCard'
-import { toLeftOrRightGameStackInSingleCardDealing, getIndexOfPossibleCardBelow } from './helperFunctions.js'
+import { toLeftOrRightGameStackInSingleCardDealing,
+    getIndexOfPossibleCardBelow,
+    getVisibleComputerCardsAtStart,
+    getIndexOfCardToMoveAndTargetStack,
+    getTargetPackLocation,
+} from './helperFunctions.js'
 
 
 
@@ -11,6 +16,7 @@ const ComputerCards = React.forwardRef((props, ref) => {
     const [computerCards] = useState(props.computerCards)
     const [cardReferences] = useState(computerCards.map(card => React.createRef()))
     const [indexDealNext, setIndexDealNext] = useState(props.computerCards.length > 15 ? 15 : 100)
+    const [visibleCards, setVisibleCards] = useState(getVisibleComputerCardsAtStart(computerCards.length))
 
     const dealSolitaireCards = () => {
         const limit = Math.min(computerCards.length, 15)
@@ -34,8 +40,38 @@ const ComputerCards = React.forwardRef((props, ref) => {
         }
     }
 
+    const performComputerCardMoveIfPossible = () => {
+        console.log('visibleCards', visibleCards)
+        const indexOfCardToMove = getIndexOfCardToMoveAndTargetStack(computerCards, visibleCards, props.topmostLeft, props.topmostRight)
+        // console.log('indexOfCardToMove',indexOfCardToMove)
+        if (indexOfCardToMove.cardIndex !== -1) {
+            const targetPackLocation = getTargetPackLocation(indexOfCardToMove.target, props.scaleUnit, props.spacing)
+            // console.log('targetPackLocation',targetPackLocation)
+            cardReferences[indexOfCardToMove.cardIndex].current.moveAndNull(targetPackLocation, true)
+            setTimeout(() => {
+                if (indexOfCardToMove.target === 'right')  {
+                    props.changeTopmostRight(computerCards[indexOfCardToMove.cardIndex])
+                } else {
+                    props.changeTopmostLeft(computerCards[indexOfCardToMove.cardIndex])
+                }
+                let updatedVisibleCards = visibleCards.filter(cardIndex => cardIndex !== indexOfCardToMove.cardIndex)
+                const indexOfCardBelow = getIndexOfPossibleCardBelow(indexOfCardToMove.cardIndex)
+                if (indexOfCardBelow !== -1) {
+                    updatedVisibleCards.push(indexOfCardBelow)
+                }
+                setVisibleCards(updatedVisibleCards)
+            }, 1000)
+            setTimeout(() => {
+                flipPossibleCardBelow(indexOfCardToMove.cardIndex)
+            }, 1500)
+
+        }
+
+    }
+
+
     useImperativeHandle(ref, () => {
-        return { dealSolitaireCards, dealSingleCard }
+        return { dealSolitaireCards, dealSingleCard, performComputerCardMoveIfPossible }
     })
 
     const flipPossibleCardBelow = (cardIndex) => {
