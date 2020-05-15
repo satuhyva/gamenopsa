@@ -11,8 +11,8 @@ const Game = (props) => {
     const [topmostRight, setTopmostRight] = useState('')
     const [playerCards] = useState(props.game.playerStack)
     const [computerCards] = useState(props.game.computerStack)
-    const referencePlayerCards = React.createRef()
-    const referenceComputerCards = React.createRef()
+    const [referencePlayerCards] = useState(React.createRef())
+    const [referenceComputerCards] = useState(React.createRef())
 
     const dealSolitaireCards = () => {
         referencePlayerCards.current.dealSolitaireCards()
@@ -30,8 +30,11 @@ const Game = (props) => {
         setTopmostLeft(card)
     }
 
+
     const computerPlay = () => {
-        referenceComputerCards.current.performComputerCardMoveIfPossible()
+        setInterval(() => {
+            referenceComputerCards.current.performComputerCardMoveIfPossible()
+        }, 3000)
     }
 
 
