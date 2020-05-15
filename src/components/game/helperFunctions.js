@@ -47,7 +47,7 @@ export const getPlayerCardLocationAfterDealing = (cardIndex, scalingUnit, spacin
         return getPlayerCardSolitaireLocation(cardIndex, scalingUnit, spacing)
     } else {
         const positionY = (0.5 + 1.5 + 0.75) * 1.7 * scalingUnit
-        const toLeftOrRightStack = toLeftOrRightGameStackInSingleCardDealing(cardIndex, cardCount)
+        const toLeftOrRightStack = toLeftOrRightGameStackInSingleCardDealing('right', cardIndex, cardCount)
         if (toLeftOrRightStack === 'right') {
             const rightPackPositionX = spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scalingUnit
             return { x: rightPackPositionX, y: positionY }
@@ -60,18 +60,18 @@ export const getPlayerCardLocationAfterDealing = (cardIndex, scalingUnit, spacin
 }
 
 
-export const toLeftOrRightGameStackInSingleCardDealing = (cardIndex, playerCardCount) => {
-    const countOfPlayerCardsToDeal = playerCardCount - 15 > 0 ? playerCardCount - 15 : 0
-    const computerCardCount = 52 - playerCardCount
-    const countOfComputerCardsToDeal = computerCardCount - 15 > 0 ? computerCardCount - 15 : 0
-    const numberOfBothPlayersDealCards = Math.min(countOfPlayerCardsToDeal, countOfComputerCardsToDeal)
+export const toLeftOrRightGameStackInSingleCardDealing = (side, cardIndex, cardCount) => {
+    const countOfCardsToDeal = cardCount - 15 > 0 ? cardCount - 15 : 0
+    const opponentCardCount = 52 - cardCount
+    const countOfComputerCardsToDeal = opponentCardCount - 15 > 0 ? opponentCardCount - 15 : 0
+    const numberOfBothPlayersDealCards = Math.min(countOfCardsToDeal, countOfComputerCardsToDeal)
     if (cardIndex < 15 + numberOfBothPlayersDealCards) {
-        return 'right'
+        return side
     } else {
-        if (computerCardCount % 2 === 0 && cardIndex% 2 === 0) {
-            return 'right'
+        if (opponentCardCount % 2 === 0 && cardIndex% 2 === 0) {
+            return side
         } else {
-            return 'left'
+            return side === 'right' ? 'left' : 'right'
         }
     }
 }
@@ -208,7 +208,7 @@ export const whatEmptyPositionWasReleasedOn = (releaseX, releaseY, scaleUnit, sp
 
     let emptyPosition = 'none'
     for (let i = 0; i < 5; i++) {
-        if (emptyPosition[i]) {
+        if (emptyPositions[i]) {
             if ((releaseX > positionsX[i] && releaseX < positionsX[i] + scaleUnit)) {
                 if ((releaseY > positionY && releaseY < positionY + scaleUnit * 1.7)) {
                     emptyPosition = i
@@ -217,4 +217,75 @@ export const whatEmptyPositionWasReleasedOn = (releaseX, releaseY, scaleUnit, sp
         }
     }
     return emptyPosition
+}
+
+
+
+export const getComputerCardStartLocation = (scalingUnit, spacing) => {
+    const positionX = spacing + (1/6) * scalingUnit
+    const positionY = (0.5 + 1.5 + 0.75) * 1.7 * scalingUnit
+    return { x: positionX, y: positionY }
+}
+
+
+export const getComputerCardLocationAfterDealing = (cardIndex, scalingUnit, spacing, cardCount) => {
+
+    if (cardIndex < 15) {
+        return getComputerCardSolitaireLocation(cardIndex, scalingUnit, spacing)
+    } else {
+        const positionY = (0.5 + 1.5 + 0.75) * 1.7 * scalingUnit
+        const toLeftOrRightStack = toLeftOrRightGameStackInSingleCardDealing('left', cardIndex, cardCount)
+        if (toLeftOrRightStack === 'right') {
+            const rightPackPositionX = spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scalingUnit
+            return { x: rightPackPositionX, y: positionY }
+        } else {
+            const leftPackPositionX = spacing + (1/6 + 1 + 4/6) * scalingUnit
+            return { x: leftPackPositionX, y: positionY }
+        }
+    }
+
+}
+
+
+
+export const getComputerCardSolitaireLocation = (cardIndex, scalingUnit, spacing) => {
+    const unitHeight = 1.7 * scalingUnit
+    const origoY =  0
+
+    let positionX = spacing
+    switch (cardIndex) {
+    case 14: case 13: case 11: case 8: case 4:
+        positionX += 1 / 6 * scalingUnit
+        break
+    case 12: case 10: case 7: case 3:
+        positionX += (2 / 6  + 1)* scalingUnit
+        break
+    case 9: case 6: case 2:
+        positionX +=  (3 / 6 + 2) * scalingUnit
+        break
+    case 5: case 1:
+        positionX +=  (4 / 6 + 3) * scalingUnit
+        break
+    default:
+        positionX +=  (5 / 6 + 4) * scalingUnit
+    }
+
+    let positionY = 0
+    switch (cardIndex) {
+    case 4: case 3: case 2: case 1: case 0:
+        positionY = origoY + (4 * 0.125) * unitHeight
+        break
+    case 8: case 7: case 6: case 5:
+        positionY = origoY + (3 * 0.125) * unitHeight
+        break
+    case 11: case 10: case 9:
+        positionY = origoY + (2 * 0.125) * unitHeight
+        break
+    case 13: case 12:
+        positionY = origoY + (1 * 0.125) * unitHeight
+        break
+    default:
+        positionY = origoY
+    }
+    return { x: positionX, y: positionY }
 }

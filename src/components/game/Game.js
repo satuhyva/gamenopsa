@@ -3,27 +3,31 @@ import { View, TouchableOpacity, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PlayerCards from './PlayerCards'
 import CommonGameStacks from './CommonGameStacks'
-
+import ComputerCards from './ComputerCards'
 
 const Game = (props) => {
 
     const [topmostLeft, setTopmostLeft] = useState('')
     const [topmostRight, setTopmostRight] = useState('')
     const [playerCards] = useState(props.game.playerStack)
+    const [computerCards] = useState(props.game.computerStack)
     const referencePlayerCards = React.createRef()
+    const referenceComputerCards = React.createRef()
 
     const dealSolitaireCards = () => {
         referencePlayerCards.current.dealSolitaireCards()
+        referenceComputerCards.current.dealSolitaireCards()
     }
     const dealSingleCards = () => {
         referencePlayerCards.current.dealSingleCard()
+        referenceComputerCards.current.dealSingleCard()
     }
 
     const changeTopmostRight = (card) => {
         setTopmostRight(card)
     }
     const changeTopmostLeft = (card) => {
-        console.log('changeTopmostLeft')
+        setTopmostLeft(card)
     }
 
 
@@ -45,11 +49,22 @@ const Game = (props) => {
                 topmostLeft={topmostLeft}
                 topmostRight={topmostRight}
             />
+            <ComputerCards
+                computerCards={computerCards}
+                ref={referenceComputerCards}
+                scaleUnit={props.scaleUnit}
+                spacing={props.spacing}
+                changeTopmostRight={changeTopmostRight}
+                changeTopmostLeft={changeTopmostLeft}
+                topmostLeft={topmostLeft}
+                topmostRight={topmostRight}
+            />
+            <Text style={{ backgroundColor: 'powderblue' }}>THIS APP IS NOT READY, IT IS UNDER DEVELOPMENT!!!</Text>
             <TouchableOpacity onPress={dealSolitaireCards} >
-                <Text >deal solitaire</Text>
+                <Text  style={{  backgroundColor: 'rosybrown' }}>BUTTON deal player solitaire (press only ONCE)</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={dealSingleCards} >
-                <Text >deal single</Text>
+                <Text  style={{  backgroundColor: 'powderblue' }}>BUTTON deal single card (press after solitaire animations)</Text>
             </TouchableOpacity>
         </View>
     )

@@ -61,8 +61,14 @@ const PlayerCards = React.forwardRef((props, ref) => {
         }
     }
 
-    const handleEmptyPositionStateChanged = (stateChange) => {
-
+    const handleEmptyPositionStateChanged = (action, indexOfEmptyPosition) => {
+        const empties = [ ...emptyPositions ]
+        if (action === 'occupy') {
+            empties[indexOfEmptyPosition] = false
+        } else {
+            empties[indexOfEmptyPosition] = true
+        }
+        setEmptyPositions(empties)
     }
 
     useImperativeHandle(ref, () => {

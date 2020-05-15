@@ -79,6 +79,9 @@ const DraggableCard = React.forwardRef((props, ref) => {
                     updateGameStackTopmostCard(whatStackCardWasReleasedOn, props.changeTopmostLeft, props.changeTopmostRight, props.card)
                     props.convertCardState('null')
                     props.setPlayerCardToPlayed(props.index)
+                    if (props.index < 5 || movedToEmpty) {
+                        props.handleEmptyPositionStateChanged('vacate', props.index)
+                    }
                     if (!movedToEmpty) {
                         props.flipPossibleCardBelow(props.index)
                     }
@@ -88,8 +91,11 @@ const DraggableCard = React.forwardRef((props, ref) => {
 
         // dealing with possible release of card on an empty position in the solitaire
         const whatEmptyPositionTheCardWasReleasedOn = whatEmptyPositionWasReleasedOn(releaseX, releaseY, props.size, props.spacing, props.emptyPositions)
-        if (whatEmptyPositionTheCardWasReleasedOn !== 'none' && !movedToEmpty) {
+        if (whatEmptyPositionTheCardWasReleasedOn !== 'none' && !movedToEmpty && props.index > 4) {
             moveCardToEmptyPosition(animatedDraggable, whatEmptyPositionTheCardWasReleasedOn, props.size, props.spacing, props.startLocation)
+            setTimeout(() => {
+                props.flipPossibleCardBelow(props.index)
+            }, 500)
             setTimeout(() => {
                 returnCard = false
                 setMovedToEmpty(true)
@@ -97,8 +103,9 @@ const DraggableCard = React.forwardRef((props, ref) => {
                     x: startLocation.x - (props.spacing + (1/6 + whatEmptyPositionTheCardWasReleasedOn * (1 + 1/6)) * props.size),
                     y: startLocation.y - ((0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * props.size),
                 })
-                props.flipPossibleCardBelow(props.index)
-            }, 500)
+                props.handleEmptyPositionStateChanged('occupy', whatEmptyPositionTheCardWasReleasedOn)
+            }, 1000)
+
             return
         }
 
