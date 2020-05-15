@@ -31,6 +31,7 @@ const ControllableComputerCard = React.forwardRef((props, ref) => {
                 endLocation={locationAfterDealing}
                 flip={cardWillFlipAfterDealing}
                 convertCardState={convertCardState}
+                setComputerCardToPlayed={props.setComputerCardToPlayed}
             />
         )
     }

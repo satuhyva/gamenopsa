@@ -324,10 +324,17 @@ export const getIndexOfCardToMoveAndTargetStack = (computerCards, visibleCardInd
 }
 
 export const getTargetPackLocation = (stack, scaleUnit, spacing) => {
-    console.log('stack, scaleUnit, spacing', stack, scaleUnit, spacing)
     const locations = new Map([
         ['left', { x: spacing +(1/6 + 1 + 4/6) * scaleUnit, y: (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit }],
         ['right', { x: spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scaleUnit, y: (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit }],
     ])
     return locations.get(stack)
+}
+
+export const isMoveStillOk = (card, side, topmostLeft, topmostRight) => {
+    if (side === 'left') {
+        return valueIsOKforPlacingOntoStack('left', topmostLeft, topmostRight, card)
+    } else {
+        valueIsOKforPlacingOntoStack('right', topmostLeft, topmostRight, card)
+    }
 }

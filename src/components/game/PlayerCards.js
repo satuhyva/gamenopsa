@@ -23,8 +23,17 @@ const PlayerCards = React.forwardRef((props, ref) => {
 
     // tämän päivittäminen muualla, että saadaan peli päättymään, jos pelaaja voittaa!!!
     useEffect(() => {
-        console.log('åpåäpäpopöopo')
-    },[playedStates])
+        let gameOver = true
+        let min = Math.min(15, playerCards.length)
+        for (let i = 0; i < min; i++) {
+            if (playedStates[i] === false) {
+                gameOver = false
+            }
+        }
+        if (gameOver) {
+            props.gameOverEndRound('player')
+        }
+    },[playedStates, playerCards.length, props])
 
     const setPlayerCardToPlayed = (cardIndex) => {
         const updatedPlayedCards = [...playedStates]

@@ -40,12 +40,20 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
         if (nullify) {
             setTimeout(() => {
                 props.convertCardState('null')
+                props.setComputerCardToPlayed(props.index)
             }, 1000)
         }
     }
 
+    const returnToOriginal = () => {
+        moveToNewLocation(animatedMove, startLocation, 0, { x: 0, y: 0 })
+        setTimeout(() => {
+            props.convertCardState('movable')
+        }, 1000)
+    }
+
     useImperativeHandle(ref, () => {
-        return { moveAndPossiblyFlip, flip, moveAndNull }
+        return { moveAndPossiblyFlip, flip, moveAndNull, returnToOriginal }
     })
 
     return (

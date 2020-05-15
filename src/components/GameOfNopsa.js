@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Dimensions, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import Game from './game/Game'
 import SetUpGame from './setup/SetUpGame'
-
+import Winner from './game/Winner'
 
 
 const GameOfNopsa = (props) => {
@@ -16,11 +16,25 @@ const GameOfNopsa = (props) => {
 
     const gameIsOn = props.game.isOn
 
+    const [winner, setWinner] = useState('none')
+
+    const gameRoundOver = (theWinner) => {
+
+        setWinner(theWinner)
+    }
+    const GameWithRounds = () => {
+        if (winner === 'none') {
+            return <Game scaleUnit={scaleUnit} spacing={spacing} gameRoundOver={gameRoundOver}/>
+        } else {
+            return <Winner winner={winner}/>
+        }
+    }
+
 
     return (
         <View style={styles.screen}>
             {gameIsOn ?
-                <Game scaleUnit={scaleUnit} spacing={spacing}/>
+                <GameWithRounds/>
                 :
                 <SetUpGame scaleUnit={scaleUnit}/>
             }

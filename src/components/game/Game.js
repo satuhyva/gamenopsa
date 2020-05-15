@@ -14,6 +14,7 @@ const Game = (props) => {
     const [referencePlayerCards] = useState(React.createRef())
     const [referenceComputerCards] = useState(React.createRef())
 
+
     const dealSolitaireCards = () => {
         referencePlayerCards.current.dealSolitaireCards()
         referenceComputerCards.current.dealSolitaireCards()
@@ -34,9 +35,15 @@ const Game = (props) => {
     const computerPlay = () => {
         setInterval(() => {
             referenceComputerCards.current.performComputerCardMoveIfPossible()
-        }, 3000)
+        }, 4000)
     }
 
+    const gameOverEndRound = (theWinner) => {
+        console.log('winner', theWinner)
+        setTimeout(() => {
+            props.gameRoundOver(theWinner)
+        }, 2000)
+    }
 
     return (
         <View>
@@ -55,6 +62,7 @@ const Game = (props) => {
                 changeTopmostLeft={changeTopmostLeft}
                 topmostLeft={topmostLeft}
                 topmostRight={topmostRight}
+                gameOverEndRound={gameOverEndRound}
             />
             <ComputerCards
                 computerCards={computerCards}
@@ -65,8 +73,9 @@ const Game = (props) => {
                 changeTopmostLeft={changeTopmostLeft}
                 topmostLeft={topmostLeft}
                 topmostRight={topmostRight}
+                gameOverEndRound={gameOverEndRound}
             />
-            <Text style={{ backgroundColor: 'powderblue' }}>THIS APP IS NOT READY, IT IS UNDER DEVELOPMENT!!!</Text>
+            <Text style={{ backgroundColor: 'powderblue' }}>PROTOTYPE, UNDER DEVELOPMENT!!!</Text>
             <TouchableOpacity onPress={dealSolitaireCards} >
                 <Text  style={{  backgroundColor: 'rosybrown' }}>BUTTON deal player solitaire (press only ONCE)</Text>
             </TouchableOpacity>
