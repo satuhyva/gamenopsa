@@ -55,7 +55,7 @@ const moveCardToEmptyPosition = (animatedDraggable, positionIndex, scaleUnit, sp
 
 const DraggableCard = React.forwardRef((props, ref) => {
 
-    const cardStyle = getCardStyle(props.size)
+    const cardStyle = getCardStyle(props.unitsAndLocations.unit)
     const [startLocation] = useState(props.startLocation)
 
     // let animatedDraggable = new Animated.ValueXY()
@@ -70,14 +70,14 @@ const DraggableCard = React.forwardRef((props, ref) => {
 
         let returnCard = true
         // dealing with possible release of card on either of the middle game stacks
-        const whatStackCardWasReleasedOn = whatStackWasReleasedOn(releaseX, releaseY, props.size, props.spacing)
+        const whatStackCardWasReleasedOn = whatStackWasReleasedOn(releaseX, releaseY, props.unitsAndLocations.unit, props.unitsAndLocations.spacing)
         if (whatStackCardWasReleasedOn !== 'none') {
-            const valueIsOK = valueIsOKforPlacingOntoStack(whatStackCardWasReleasedOn, props.topmostLeft, props.topmostRight, props.card)
+            const valueIsOK = valueIsOKforPlacingOntoStack(whatStackCardWasReleasedOn, props.topmostStuff.valueLeft, props.topmostStuff.valueRight, props.card)
             if (valueIsOK) {
                 returnCard = false
-                moveCardToGameStack(animatedDraggable, whatStackCardWasReleasedOn, props.size, props.spacing, props.startLocation)
+                moveCardToGameStack(animatedDraggable, whatStackCardWasReleasedOn, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.startLocation)
                 setTimeout(() => {
-                    updateGameStackTopmostCard(whatStackCardWasReleasedOn, props.changeTopmostLeft, props.changeTopmostRight, props.card)
+                    updateGameStackTopmostCard(whatStackCardWasReleasedOn, props.topmostStuff.changeLeft, props.topmostStuff.changeRight, props.card)
                     props.convertCardState('null')
                     props.setPlayerCardToPlayed(props.index)
                     if (props.index < 5 || movedToEmpty) {
@@ -91,9 +91,9 @@ const DraggableCard = React.forwardRef((props, ref) => {
         }
 
         // dealing with possible release of card on an empty position in the solitaire
-        const whatEmptyPositionTheCardWasReleasedOn = whatEmptyPositionWasReleasedOn(releaseX, releaseY, props.size, props.spacing, props.emptyPositions)
+        const whatEmptyPositionTheCardWasReleasedOn = whatEmptyPositionWasReleasedOn(releaseX, releaseY, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.emptyPositions)
         if (whatEmptyPositionTheCardWasReleasedOn !== 'none' && !movedToEmpty && props.index > 4) {
-            moveCardToEmptyPosition(animatedDraggable, whatEmptyPositionTheCardWasReleasedOn, props.size, props.spacing, props.startLocation)
+            moveCardToEmptyPosition(animatedDraggable, whatEmptyPositionTheCardWasReleasedOn, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.startLocation)
             setTimeout(() => {
                 props.flipPossibleCardBelow(props.index)
             }, 500)
@@ -101,8 +101,8 @@ const DraggableCard = React.forwardRef((props, ref) => {
                 returnCard = false
                 setMovedToEmpty(true)
                 setUpdatedLocation({
-                    x: startLocation.x - (props.spacing + (1/6 + whatEmptyPositionTheCardWasReleasedOn * (1 + 1/6)) * props.size),
-                    y: startLocation.y - ((0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * props.size),
+                    x: startLocation.x - (props.spacing + (1/6 + whatEmptyPositionTheCardWasReleasedOn * (1 + 1/6)) * props.unitsAndLocations.unit),
+                    y: startLocation.y - ((0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * props.unitsAndLocations.unit),
                 })
                 props.handleEmptyPositionStateChanged('occupy', whatEmptyPositionTheCardWasReleasedOn)
                 setEmptyIndexOccupied(whatEmptyPositionTheCardWasReleasedOn)

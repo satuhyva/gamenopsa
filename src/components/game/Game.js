@@ -13,7 +13,10 @@ const Game = (props) => {
     const [computerCards] = useState(props.game.computerStack)
     const [referencePlayerCards] = useState(React.createRef())
     const [referenceComputerCards] = useState(React.createRef())
-
+    const [unitsAndLocations] = useState(props.unitsAndLocations)
+    const [cumulativeLeftStack, setCumulativeLeftStack] = useState([])
+    const [cumulativeRightStack, setCumulativeRightStack] = useState([])
+    const [touchingDisabled, setTouchingDisabled] = useState(true)
 
     const dealSolitaireCards = () => {
         referencePlayerCards.current.dealSolitaireCards()
@@ -26,9 +29,15 @@ const Game = (props) => {
 
     const changeTopmostRight = (card) => {
         setTopmostRight(card)
+        // lisättävä tieto cumulative stackkiin, että mistä pinosta
+        // kortti on tulossa ja talletetaan cumulativeen esim. muodossa
+        // { card: ###, from: ### }
     }
     const changeTopmostLeft = (card) => {
         setTopmostLeft(card)
+        // lisättävä tieto cumulative stackkiin, että mistä pinosta
+        // kortti on tulossa ja talletetaan cumulativeen esim. muodossa
+        // { card: ###, from: ### }
     }
 
 
@@ -39,10 +48,16 @@ const Game = (props) => {
     }
 
     const gameOverEndRound = (theWinner) => {
-        console.log('winner', theWinner)
         setTimeout(() => {
             props.gameRoundOver(theWinner)
         }, 2000)
+    }
+
+    const topmostStuff = {
+        valueLeft: topmostLeft,
+        valueRight: topmostRight,
+        changeLeft: changeTopmostLeft,
+        changeRight: changeTopmostRight,
     }
 
     return (
@@ -50,30 +65,21 @@ const Game = (props) => {
             <CommonGameStacks
                 topmostLeft={topmostLeft}
                 topmostRight={topmostRight}
-                scaleUnit={props.scaleUnit}
-                spacing={props.spacing}
+                unitsAndLocations={unitsAndLocations}
             />
             <PlayerCards
                 playerCards={playerCards}
                 ref={referencePlayerCards}
-                scaleUnit={props.scaleUnit}
-                spacing={props.spacing}
-                changeTopmostRight={changeTopmostRight}
-                changeTopmostLeft={changeTopmostLeft}
-                topmostLeft={topmostLeft}
-                topmostRight={topmostRight}
                 gameOverEndRound={gameOverEndRound}
+                unitsAndLocations={unitsAndLocations}
+                topmostStuff={topmostStuff}
             />
             <ComputerCards
                 computerCards={computerCards}
                 ref={referenceComputerCards}
-                scaleUnit={props.scaleUnit}
-                spacing={props.spacing}
-                changeTopmostRight={changeTopmostRight}
-                changeTopmostLeft={changeTopmostLeft}
-                topmostLeft={topmostLeft}
-                topmostRight={topmostRight}
                 gameOverEndRound={gameOverEndRound}
+                unitsAndLocations={unitsAndLocations}
+                topmostStuff={topmostStuff}
             />
             <Text style={{ backgroundColor: 'powderblue' }}>PROTOTYPE, UNDER DEVELOPMENT!!!</Text>
             <TouchableOpacity onPress={dealSolitaireCards} >

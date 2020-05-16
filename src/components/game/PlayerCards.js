@@ -15,6 +15,7 @@ const getPlayerCardsPlayedStates = (cardCount) => {
 
 const PlayerCards = React.forwardRef((props, ref) => {
 
+
     const [playerCards] = useState(props.playerCards)
     const [cardReferences] = useState(playerCards.map(card => React.createRef()))
     const [indexDealNext, setIndexDealNext] = useState(props.playerCards.length > 15 ? 15 : 100)
@@ -54,9 +55,9 @@ const PlayerCards = React.forwardRef((props, ref) => {
             setTimeout(() => {
                 const toWhichStack = toLeftOrRightGameStackInSingleCardDealing(indexDealNext, playerCards.length)
                 if (toWhichStack === 'right')  {
-                    props.changeTopmostRight(playerCards[indexDealNext])
+                    props.topmostStuff.changeRight(playerCards[indexDealNext])
                 } else {
-                    props.changeTopmostLeft(playerCards[indexDealNext])
+                    props.topmostStuff.changeLeft(playerCards[indexDealNext])
                 }
                 setIndexDealNext(indexDealNext + 1)
             }, 1600)
@@ -94,17 +95,13 @@ const PlayerCards = React.forwardRef((props, ref) => {
                         index={index}
                         card={card}
                         ref={cardReferences[index]}
-                        scaleUnit={props.scaleUnit}
-                        spacing={props.spacing}
                         cardCount={playerCards.length}
-                        topmostLeft={props.topmostLeft}
-                        topmostRight={props.topmostRight}
-                        changeTopmostRight={props.changeTopmostRight}
-                        changeTopmostLeft={props.changeTopmostLeft}
                         flipPossibleCardBelow={flipPossibleCardBelow}
                         setPlayerCardToPlayed={setPlayerCardToPlayed}
                         emptyPositions={emptyPositions}
                         handleEmptyPositionStateChanged={handleEmptyPositionStateChanged}
+                        unitsAndLocations={props.unitsAndLocations}
+                        topmostStuff={props.topmostStuff}
                     />
                 )
             })}

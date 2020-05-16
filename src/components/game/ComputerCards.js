@@ -59,9 +59,9 @@ const ComputerCards = React.forwardRef((props, ref) => {
             setTimeout(() => {
                 const toWhichStack = toLeftOrRightGameStackInSingleCardDealing('left', indexDealNext, computerCards.length)
                 if (toWhichStack === 'right')  {
-                    props.changeTopmostRight(computerCards[indexDealNext])
+                    props.topmostStuff.changeRight(computerCards[indexDealNext])
                 } else {
-                    props.changeTopmostLeft(computerCards[indexDealNext])
+                    props.topmostStuff.changeLeft(computerCards[indexDealNext])
                 }
                 setIndexDealNext(indexDealNext + 1)
             }, 1600)
@@ -69,19 +69,19 @@ const ComputerCards = React.forwardRef((props, ref) => {
     }
 
     const performComputerCardMoveIfPossible = () => {
-        const indexOfCardToMove = getIndexOfCardToMoveAndTargetStack(computerCards, visibleCards, props.topmostLeft, props.topmostRight)
+        const indexOfCardToMove = getIndexOfCardToMoveAndTargetStack(computerCards, visibleCards, props.topmostStuff.valueLeft, props.topmostStuff.valueRight)
         // console.log('indexOfCardToMove',indexOfCardToMove)
         if (indexOfCardToMove.cardIndex !== -1) {
-            const targetPackLocation = getTargetPackLocation(indexOfCardToMove.target, props.scaleUnit, props.spacing)
+            const targetPackLocation = getTargetPackLocation(indexOfCardToMove.target, props.unitsAndLocations.unit, props.unitsAndLocations.spacing)
             // console.log('targetPackLocation',targetPackLocation)
             cardReferences[indexOfCardToMove.cardIndex].current.moveAndNull(targetPackLocation, true)
             //puuttuu vielä se, että palautetaan takaisin omalle paikalleen, mikäli pelaaja on jo
             // ehtinyt tässä välissä tuomaan kortin pinoon
             setTimeout(() => {
                 if (indexOfCardToMove.target === 'right')  {
-                    props.changeTopmostRight(computerCards[indexOfCardToMove.cardIndex])
+                    props.topmostStuff.changeRight(computerCards[indexOfCardToMove.cardIndex])
                 } else {
-                    props.changeTopmostLeft(computerCards[indexOfCardToMove.cardIndex])
+                    props.topmostStuff.changeLeft(computerCards[indexOfCardToMove.cardIndex])
                 }
                 let updatedVisibleCards = visibleCards.filter(cardIndex => cardIndex !== indexOfCardToMove.cardIndex)
                 const indexOfCardBelow = getIndexOfPossibleCardBelow(indexOfCardToMove.cardIndex)
@@ -121,11 +121,11 @@ const ComputerCards = React.forwardRef((props, ref) => {
                         index={index}
                         card={card}
                         ref={cardReferences[index]}
-                        scaleUnit={props.scaleUnit}
                         spacing={props.spacing}
                         cardCount={computerCards.length}
                         flipPossibleCardBelow={flipPossibleCardBelow}
                         setComputerCardToPlayed={setComputerCardToPlayed}
+                        unitsAndLocations={props.unitsAndLocations}
                     />
                 )
             })}

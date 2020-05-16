@@ -6,9 +6,10 @@ import { getPlayerCardLocationAfterDealing, getPlayerCardStartLocation, getCardF
 
 const ControllablePlayerCard = React.forwardRef((props, ref) => {
 
+
     const [cardState, setCardState] = useState('movable')
-    const [locationAtStart] = useState(getPlayerCardStartLocation(props.scaleUnit, props.spacing))
-    const [locationAfterDealing] = useState(getPlayerCardLocationAfterDealing(props.index, props.scaleUnit, props.spacing, props.cardCount))
+    const [locationAtStart] = useState(getPlayerCardStartLocation(props.unitsAndLocations.unit, props.unitsAndLocations.spacing))
+    const [locationAfterDealing] = useState(getPlayerCardLocationAfterDealing(props.index, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.cardCount))
     const [cardWillFlipAfterDealing] = useState(getCardFlipStateAfterDealing(props.index, props.cardCount))
 
     const convertCardState = (newState) => {
@@ -23,18 +24,14 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
                 card={props.card}
                 ref={ref}
                 index={props.index}
-                size={props.scaleUnit}
                 startLocation={locationAfterDealing}
-                topmostLeft={props.topmostLeft}
-                topmostRight={props.topmostRight}
-                changeTopmostRight={props.changeTopmostRight}
-                changeTopmostLeft={props.changeTopmostLeft}
-                spacing={props.spacing}
                 convertCardState={convertCardState}
                 flipPossibleCardBelow={props.flipPossibleCardBelow}
                 setPlayerCardToPlayed={props.setPlayerCardToPlayed}
                 emptyPositions={props.emptyPositions}
                 handleEmptyPositionStateChanged={props.handleEmptyPositionStateChanged}
+                unitsAndLocations={props.unitsAndLocations}
+                topmostStuff={props.topmostStuff}
             />
         )
     } else {
@@ -42,12 +39,12 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
             <MovableFlippableCard
                 ref={ref}
                 index={props.index}
-                scaleUnit={props.scaleUnit}
                 startLocation={locationAtStart}
                 card={props.card}
                 endLocation={locationAfterDealing}
                 flip={cardWillFlipAfterDealing}
                 convertCardState={convertCardState}
+                unitsAndLocations={props.unitsAndLocations}
             />
         )
     }

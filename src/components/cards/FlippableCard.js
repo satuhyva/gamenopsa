@@ -4,10 +4,10 @@ import CardFront from './CardFront'
 import CardBack from './CardBack'
 
 
-const getCardStyle = (size) => {
+const getCardStyle = (unit) => {
     return {
-        width: size,
-        height: size * 1.7,
+        width: unit,
+        height: unit * 1.7,
         borderRadius: 7,
         backgroundColor: 'papayawhip',
     }
@@ -28,7 +28,8 @@ const performFlipAnimations = (animatedFlipBackside, animatedFlipFrontside) => {
 
 const FlippableCard = React.forwardRef((props, ref) => {
 
-    const cardStyle = getCardStyle(props.size)
+    const cardStyle = getCardStyle(props.unitsAndLocations.unit)
+    const timing = props.unitsAndLocations.timing
 
     let animatedFlipBackside = new Animated.Value(0)
     const interpolatedFlipBackside = animatedFlipBackside.interpolate({
@@ -44,11 +45,11 @@ const FlippableCard = React.forwardRef((props, ref) => {
 
 
     const flip = () => {
-        const newState = props.index > 14 ? 'null' : 'draggable'
+        const stateAfterFlipping = props.index > 14 ? 'null' : 'draggable'
         performFlipAnimations(animatedFlipBackside, animatedFlipFrontside)
         setTimeout(() => {
-            props.convertCardState(newState)
-        }, 600)
+            props.convertCardState(stateAfterFlipping)
+        }, timing.medium)
     }
 
     useImperativeHandle(ref, () => {
@@ -59,7 +60,7 @@ const FlippableCard = React.forwardRef((props, ref) => {
     return (
         <View>
             <Animated.View style={[cardStyle, { position: 'absolute', left: 0 }, animatedFlipBacksideStyle]}>
-                <CardBack scaleUnit={props.size}/>
+                <CardBack scaleUnit={props.unitsAndLocations.unit}/>
             </Animated.View>
             <Animated.View style={[cardStyle, animatedFlipFrontsideStyle]}>
                 <CardFront card={props.card}/>

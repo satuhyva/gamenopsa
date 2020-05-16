@@ -3,27 +3,24 @@ import { View } from 'react-native'
 import CardFront from '../cards/CardFront'
 
 
-const getCardViewStyleLeft = (scaleUnit, spacing) => {
-    return {
+const getCardViewStyle = (side, unitsAndLocations) => {
+    let commonStyles = {
         position: 'absolute',
-        left: spacing + (1/6 + 1 + 4/6) * scaleUnit,
-        top: (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit,
-        width: scaleUnit,
-        height: 1.7 * scaleUnit,
+        width: unitsAndLocations.unit,
+        height: 1.7 * unitsAndLocations.unit,
         borderRadius: 7,
         zIndex: 0,
     }
-}
-
-const getCardViewStyleRight = (scaleUnit, spacing) => {
-    return {
-        position: 'absolute',
-        left: spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * scaleUnit,
-        top: (0.5 + 1.5 + 0.75) * 1.7 * scaleUnit,
-        width: scaleUnit,
-        height: 1.7 * scaleUnit,
-        borderRadius: 7,
-        zIndex: 0,
+    if (side === 'left') {
+        return { ...commonStyles,
+            left: unitsAndLocations.leftGamingStackXY.x,
+            top: unitsAndLocations.leftGamingStackXY.y,
+        }
+    } else {
+        return { ...commonStyles,
+            left: unitsAndLocations.rightGamingStackXY.x,
+            top: unitsAndLocations.rightGamingStackXY.y,
+        }
     }
 }
 
@@ -41,10 +38,10 @@ const GameStack = ({ viewStyle, topmost }) => {
     )
 }
 
-const CommonGameStacks = ({ topmostLeft, topmostRight,  scaleUnit, spacing }) => {
+const CommonGameStacks = ({ topmostLeft, topmostRight, unitsAndLocations }) => {
 
-    const cardViewStyleLeft = getCardViewStyleLeft(scaleUnit, spacing)
-    const cardViewStyleRight = getCardViewStyleRight(scaleUnit, spacing)
+    const cardViewStyleLeft = getCardViewStyle('left', unitsAndLocations)
+    const cardViewStyleRight = getCardViewStyle('right', unitsAndLocations)
 
     return (
         <View>

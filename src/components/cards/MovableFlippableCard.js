@@ -62,8 +62,8 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
                 ref={referenceFlip}
                 index={props.index}
                 card={props.card}
-                size={props.scaleUnit}
                 convertCardState={props.convertCardState}
+                unitsAndLocations={props.unitsAndLocations}
             />
         </Animated.View>
     )

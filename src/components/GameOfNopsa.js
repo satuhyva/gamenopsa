@@ -13,7 +13,7 @@ const GameOfNopsa = (props) => {
     const scaleUnit = Math.min(screenWidth / 6, screenHeight /(6 * 1.7))
     const styles = getStyles(screenWidth, screenHeight)
     const spacing = (screenWidth - 6 * scaleUnit) / 2
-
+    const unitsAndLocations = getUnitsAndLocations(scaleUnit, spacing)
     const gameIsOn = props.game.isOn
 
     const [winner, setWinner] = useState('none')
@@ -24,7 +24,7 @@ const GameOfNopsa = (props) => {
     }
     const GameWithRounds = () => {
         if (winner === 'none') {
-            return <Game scaleUnit={scaleUnit} spacing={spacing} gameRoundOver={gameRoundOver}/>
+            return <Game scaleUnit={scaleUnit} spacing={spacing} gameRoundOver={gameRoundOver} unitsAndLocations={unitsAndLocations}/>
         } else {
             return <Winner winner={winner}/>
         }
@@ -63,6 +63,43 @@ const getStyles = (screenWidth, screenHeight) => {
             backgroundColor: 'green',
         },
     })
+}
+
+
+const getUnitsAndLocations = (unit, spacing) => {
+
+    const leftDealingStackXY = {
+        x: spacing + (1/6) * unit,
+        y: (0.5 + 1.5 + 0.75) * 1.7 * unit,
+    }
+    const leftGamingStackXY = {
+        x: spacing + (1/6 + 1 + 4/6) * unit,
+        y: (0.5 + 1.5 + 0.75) * 1.7 * unit,
+    }
+    const rightGamingStackXY = {
+        x: spacing + (1/6 + 1 + 4/6 + 1 + 2/6) * unit,
+        y: (0.5 + 1.5 + 0.75) * 1.7 * unit,
+    }
+    const rightDealingStackXY = {
+        x: spacing + (1/6 + 1 + 4/6 + 1 + 2/6 + 1 + 4/6) * unit,
+        y: (0.5 + 1.5 + 0.75) * 1.7 * unit,
+    }
+
+    return {
+        unit: unit,
+        spacing: spacing,
+        leftDealingStackXY: leftDealingStackXY,
+        leftGamingStackXY: leftGamingStackXY,
+        rightGamingStackXY: rightGamingStackXY,
+        rightDealingStackXY: rightDealingStackXY,
+        timing: {
+            short: 100,
+            medium: 600,
+            long: 500,
+        },
+    }
+
+
 }
 
 
