@@ -13,13 +13,13 @@ const getCardStyle = (unit) => {
     }
 }
 
-const performFlipAnimations = (animatedFlipBackside, animatedFlipFrontside) => {
+const performFlipAnimations = (animatedFlipBacksideValue, animatedFlipFrontsideValue, flipDuration) => {
     Animated.sequence([
-        Animated.timing(animatedFlipBackside, {
-            toValue: 90, tension: 10, friction: 10, duration: 300,
+        Animated.timing(animatedFlipBacksideValue, {
+            toValue: 90, tension: 10, friction: 10, duration: flipDuration / 2,
         }),
-        Animated.timing(animatedFlipFrontside, {
-            toValue: 180, tension: 10, friction: 10, duration: 300,
+        Animated.timing(animatedFlipFrontsideValue, {
+            toValue: 180, tension: 10, friction: 10, duration: flipDuration / 2,
         }),
     ]).start()
 }
@@ -29,27 +29,22 @@ const performFlipAnimations = (animatedFlipBackside, animatedFlipFrontside) => {
 const FlippableCard = React.forwardRef((props, ref) => {
 
     const cardStyle = getCardStyle(props.unitsAndLocations.unit)
-    const timing = props.unitsAndLocations.timing
 
-    let animatedFlipBackside = new Animated.Value(0)
-    const interpolatedFlipBackside = animatedFlipBackside.interpolate({
+    let animatedFlipBacksideValue = new Animated.Value(0)
+    const interpolatedFlipBackside = animatedFlipBacksideValue.interpolate({
         inputRange: [0, 180], outputRange: ['180deg', '360deg'],
     })
     const animatedFlipBacksideStyle = { transform: [ { rotateX: interpolatedFlipBackside } ] }
 
-    let animatedFlipFrontside = new Animated.Value(90)
-    const interpolatedFlipFrontside = animatedFlipFrontside.interpolate({
+    let animatedFlipFrontsideValue = new Animated.Value(90)
+    const interpolatedFlipFrontside = animatedFlipFrontsideValue.interpolate({
         inputRange: [0, 180], outputRange: ['180deg', '360deg'],
     })
     const animatedFlipFrontsideStyle = { transform: [ { rotateX: interpolatedFlipFrontside } ] }
 
 
-    const flip = () => {
-        const stateAfterFlipping = props.index > 14 ? 'null' : 'draggable'
-        performFlipAnimations(animatedFlipBackside, animatedFlipFrontside)
-        setTimeout(() => {
-            props.convertCardState(stateAfterFlipping)
-        }, timing.medium)
+    const flip = (flipDuration) => {
+        performFlipAnimations(animatedFlipBacksideValue, animatedFlipFrontsideValue, flipDuration)
     }
 
     useImperativeHandle(ref, () => {

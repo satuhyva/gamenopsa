@@ -93,14 +93,20 @@ const getUnitsAndLocations = (unit, spacing) => {
         rightGamingStackXY: rightGamingStackXY,
         rightDealingStackXY: rightDealingStackXY,
         timing: {
-            short: 100,
-            medium: 600,
-            long: 500,
+            moveDurationDealing: 1000,
+            flipDurationDealing: 600,
+            veryfast: 50,
+            fast: 100,
+            medium: 200,
+            slow: 600,
+            veryslow: 1000,
+
         },
     }
-
-
 }
+
+// timings:
+// flip card completely (2 halve animations together)       medium
 
 
 

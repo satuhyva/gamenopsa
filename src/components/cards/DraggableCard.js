@@ -37,13 +37,6 @@ const moveCardToGameStack = (animatedDraggable, side, scaleUnit, spacing, startL
     moveToNewPosition(animatedDraggable, { x: newX, y: newY }, startLocation )
 }
 
-const updateGameStackTopmostCard = (side, changeTopmostLeft, changeTopmostRight, card) => {
-    if (side === 'left') {
-        changeTopmostLeft(card)
-    } else {
-        changeTopmostRight(card)
-    }
-}
 
 const moveCardToEmptyPosition = (animatedDraggable, positionIndex, scaleUnit, spacing, startLocation) => {
     const newX = spacing + (1/6 + positionIndex * (1 + 1/6)) * scaleUnit
@@ -53,17 +46,14 @@ const moveCardToEmptyPosition = (animatedDraggable, positionIndex, scaleUnit, sp
 
 
 
+
 const DraggableCard = React.forwardRef((props, ref) => {
 
     const cardStyle = getCardStyle(props.unitsAndLocations.unit)
     const [startLocation] = useState(props.startLocation)
-
-    // let animatedDraggable = new Animated.ValueXY()
-    const [animatedDraggable, setAnimatedDraggable] = useState(new Animated.ValueXY())
+    const [animatedDraggable] = useState(new Animated.ValueXY())
     const dragStyle = { transform: [ { translateX: animatedDraggable.x }, { translateY: animatedDraggable.y }] }
     const [updatedLocation, setUpdatedLocation] = useState({ x: 0, y: 0 })
-    const [movedToEmpty, setMovedToEmpty] = useState(false)
-    const [emptyIndexOccupied, setEmptyIndexOccupied] = useState(props.index)
 
 
     const handleReleasedCard = (releaseX, releaseY) => {
@@ -77,37 +67,23 @@ const DraggableCard = React.forwardRef((props, ref) => {
                 returnCard = false
                 moveCardToGameStack(animatedDraggable, whatStackCardWasReleasedOn, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.startLocation)
                 setTimeout(() => {
-                    updateGameStackTopmostCard(whatStackCardWasReleasedOn, props.topmostStuff.changeLeft, props.topmostStuff.changeRight, props.card)
-                    props.convertCardState('null')
-                    props.setPlayerCardToPlayed(props.index)
-                    if (props.index < 5 || movedToEmpty) {
-                        props.handleEmptyPositionStateChanged('vacate', emptyIndexOccupied)
-                    }
-                    if (!movedToEmpty) {
-                        props.flipPossibleCardBelow(props.index)
-                    }
+                    props.handleChangesAfterPlayingACard(props.index, whatStackCardWasReleasedOn)
                 }, 500)
             }
         }
 
-        // dealing with possible release of card on an empty position in the solitaire
-        const whatEmptyPositionTheCardWasReleasedOn = whatEmptyPositionWasReleasedOn(releaseX, releaseY, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.emptyPositions)
-        if (whatEmptyPositionTheCardWasReleasedOn !== 'none' && !movedToEmpty && props.index > 4) {
+        const whatEmptyPositionTheCardWasReleasedOn = whatEmptyPositionWasReleasedOn(releaseX, releaseY, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.occupancyData)
+
+        if (whatEmptyPositionTheCardWasReleasedOn !== 'none') {
             moveCardToEmptyPosition(animatedDraggable, whatEmptyPositionTheCardWasReleasedOn, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.startLocation)
             setTimeout(() => {
-                props.flipPossibleCardBelow(props.index)
-            }, 500)
-            setTimeout(() => {
                 returnCard = false
-                setMovedToEmpty(true)
                 setUpdatedLocation({
-                    x: startLocation.x - (props.spacing + (1/6 + whatEmptyPositionTheCardWasReleasedOn * (1 + 1/6)) * props.unitsAndLocations.unit),
-                    y: startLocation.y - ((0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * props.unitsAndLocations.unit),
+                    x: (startLocation.x - (props.unitsAndLocations.spacing + (1/6 + whatEmptyPositionTheCardWasReleasedOn * (1 + 1/6)) * props.unitsAndLocations.unit)),
+                    y: (startLocation.y - ((0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * props.unitsAndLocations.unit)),
                 })
-                props.handleEmptyPositionStateChanged('occupy', whatEmptyPositionTheCardWasReleasedOn)
-                setEmptyIndexOccupied(whatEmptyPositionTheCardWasReleasedOn)
+                props.handleMovedCardToEmptyPosition(props.index, whatEmptyPositionTheCardWasReleasedOn)
             }, 1000)
-
             return
         }
 

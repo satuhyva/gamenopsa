@@ -3,13 +3,23 @@ import { Animated } from 'react-native'
 import FlippableCard from '../cards/FlippableCard'
 
 
-const moveToNewLocation = (animatedMove, startLocation, delay, newLocation) => {
+const moveToNewLocation = (animatedMove, startLocation, delay, newLocation, moveDuration) => {
     Animated.sequence([
         Animated.delay(delay),
         Animated.timing(animatedMove, {
-            toValue: { x: newLocation.x - startLocation.x, y: newLocation.y - startLocation.y }, duration: 1000,
+            toValue: { x: newLocation.x - startLocation.x, y: newLocation.y - startLocation.y }, duration: moveDuration,
         }),
     ]).start()
+}
+
+const moveCardAndSetStateToNull = (animatedMove, startLocation, targetLocation, nullify, convertCardState, index, setComputerCardToPlayed) => {
+    moveToNewLocation(animatedMove, startLocation, 0, targetLocation, 1000)
+    if (nullify) {
+        setTimeout(() => {
+            convertCardState('null')
+            setComputerCardToPlayed(index)
+        }, 1000)
+    }
 }
 
 
@@ -21,39 +31,37 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
     const [startLocation] = useState(props.startLocation)
     const referenceFlip = React.createRef()
 
-    const flip = () => {
-        referenceFlip.current.flip()
+    const flipOnly = (flipDurationDealing) => {
+        referenceFlip.current.flip(flipDurationDealing)
+        const stateAfterFlipping = props.index > 14 ? 'null' : 'draggable'
+        setTimeout(() => {
+            props.convertCardState(stateAfterFlipping)
+        }, flipDurationDealing)
     }
 
-    const moveAndPossiblyFlip = () => {
+    const moveAndPossiblyFlipWithDelay = (moveDurationDealing, flipDurationDealing) => {
         const delay = props.index > 14 ? 0 : 500 * props.index
-        moveToNewLocation(animatedMove, startLocation, delay, props.endLocation)
+        moveToNewLocation(animatedMove, startLocation, delay, props.endLocation, moveDurationDealing)
         if (props.flip) {
             setTimeout(() => {
-                flip()
-            }, delay + 1000)
+                flipOnly(flipDurationDealing)
+            }, delay + moveDurationDealing)
         }
     }
 
     const moveAndNull = (targetLocation, nullify) => {
-        moveToNewLocation(animatedMove, startLocation, 0, targetLocation)
-        if (nullify) {
-            setTimeout(() => {
-                props.convertCardState('null')
-                props.setComputerCardToPlayed(props.index)
-            }, 1000)
-        }
+        moveCardAndSetStateToNull(animatedMove, startLocation, targetLocation, nullify, props.convertCardState, props.index, props.setComputerCardToPlayed)
     }
 
     const returnToOriginal = () => {
-        moveToNewLocation(animatedMove, startLocation, 0, { x: 0, y: 0 })
+        moveToNewLocation(animatedMove, startLocation, 0, { x: 0, y: 0 }, 1000)
         setTimeout(() => {
             props.convertCardState('movable')
         }, 1000)
     }
 
     useImperativeHandle(ref, () => {
-        return { moveAndPossiblyFlip, flip, moveAndNull, returnToOriginal }
+        return { moveAndPossiblyFlipWithDelay, flipOnly, moveAndNull, returnToOriginal }
     })
 
     return (

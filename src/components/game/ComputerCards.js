@@ -6,6 +6,7 @@ import { toLeftOrRightGameStackInSingleCardDealing,
     getVisibleComputerCardsAtStart,
     getIndexOfCardToMoveAndTargetStack,
     getTargetPackLocation,
+    getCardStatesAtStart,
 } from './helperFunctions.js'
 
 
@@ -25,6 +26,8 @@ const ComputerCards = React.forwardRef((props, ref) => {
     const [indexDealNext, setIndexDealNext] = useState(props.computerCards.length > 15 ? 15 : 100)
     const [visibleCards, setVisibleCards] = useState(getVisibleComputerCardsAtStart(computerCards.length))
     const [playedStates, setPlayedStates] = useState(getComputerCardsPlayedStates(props.computerCards.length))
+    const [cardStates, setCardStates] = useState(getCardStatesAtStart(props.computerCards.length))
+    const timing = props.unitsAndLocations.timing
 
     useEffect(() => {
         let gameOver = true
@@ -49,13 +52,13 @@ const ComputerCards = React.forwardRef((props, ref) => {
     const dealSolitaireCards = () => {
         const limit = Math.min(computerCards.length, 15)
         for (let i = 0; i < limit; i++) {
-            cardReferences[i].current.moveAndPossiblyFlip()
+            cardReferences[i].current.moveAndPossiblyFlipWithDelay(timing.moveDurationDealing, timing.flipDurationDealing)
         }
     }
 
     const dealSingleCard = () => {
         if (indexDealNext < props.computerCards.length) {
-            cardReferences[indexDealNext].current.moveAndPossiblyFlip()
+            cardReferences[indexDealNext].current.moveAndPossiblyFlipWithDelay(timing.moveDurationDealing, timing.flipDurationDealing)
             setTimeout(() => {
                 const toWhichStack = toLeftOrRightGameStackInSingleCardDealing('left', indexDealNext, computerCards.length)
                 if (toWhichStack === 'right')  {
@@ -64,7 +67,7 @@ const ComputerCards = React.forwardRef((props, ref) => {
                     props.topmostStuff.changeLeft(computerCards[indexDealNext])
                 }
                 setIndexDealNext(indexDealNext + 1)
-            }, 1600)
+            }, timing.moveDurationDealing + timing.flipDurationDealing)
         }
     }
 
@@ -106,7 +109,7 @@ const ComputerCards = React.forwardRef((props, ref) => {
     const flipPossibleCardBelow = (cardIndex) => {
         const indexOfCardBelow = getIndexOfPossibleCardBelow(cardIndex)
         if (indexOfCardBelow !== -1) {
-            cardReferences[indexOfCardBelow].current.flip()
+            cardReferences[indexOfCardBelow].current.flipOnly(600)
         }
     }
 
@@ -126,6 +129,7 @@ const ComputerCards = React.forwardRef((props, ref) => {
                         flipPossibleCardBelow={flipPossibleCardBelow}
                         setComputerCardToPlayed={setComputerCardToPlayed}
                         unitsAndLocations={props.unitsAndLocations}
+                        cardState={cardStates[index]}
                     />
                 )
             })}

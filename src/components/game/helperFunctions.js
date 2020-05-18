@@ -198,19 +198,21 @@ export const getIndexOfPossibleCardBelow = (cardIndex) => {
 }
 
 
-export const whatEmptyPositionWasReleasedOn = (releaseX, releaseY, scaleUnit, spacing, emptyPositions) => {
 
-    const positionsX = []
+export const whatEmptyPositionWasReleasedOn = (releaseX, releaseY, scaleUnit, spacing, occupancyData) => {
+
+    const emptyPositionsX = []
     for (let i = 0; i < 5; i++) {
-        positionsX.push(spacing + (1/6 + i * (1 + 1/6)) * scaleUnit)
+        emptyPositionsX.push(spacing + (1/6 + i * (1 + 1/6)) * scaleUnit)
     }
-    const positionY = (0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * scaleUnit
+    const emptyPositionsY = (0.5 + 1.5 + 0.75 + 1 + 0.75) * 1.7 * scaleUnit
 
     let emptyPosition = 'none'
     for (let i = 0; i < 5; i++) {
-        if (emptyPositions[i]) {
-            if ((releaseX > positionsX[i] && releaseX < positionsX[i] + scaleUnit)) {
-                if ((releaseY > positionY && releaseY < positionY + scaleUnit * 1.7)) {
+        const indexOfCardAtPosition = occupancyData[i]
+        if (indexOfCardAtPosition === -1) {
+            if ((releaseX > emptyPositionsX[i] && releaseX < emptyPositionsX[i] + scaleUnit)) {
+                if ((releaseY > emptyPositionsY && releaseY < emptyPositionsY + scaleUnit * 1.7)) {
                     emptyPosition = i
                 }
             }
@@ -250,7 +252,7 @@ export const getComputerCardLocationAfterDealing = (cardIndex, scalingUnit, spac
 
 export const getComputerCardSolitaireLocation = (cardIndex, scalingUnit, spacing) => {
     const unitHeight = 1.7 * scalingUnit
-    const origoY =  0
+    const origoY =  0.5 * unitHeight
 
     let positionX = spacing
     switch (cardIndex) {
@@ -336,5 +338,47 @@ export const isMoveStillOk = (card, side, topmostLeft, topmostRight) => {
         return valueIsOKforPlacingOntoStack('left', topmostLeft, topmostRight, card)
     } else {
         valueIsOKforPlacingOntoStack('right', topmostLeft, topmostRight, card)
+    }
+}
+
+export const getCardStatesAtStart = (cardCount) => {
+    let cardStates = []
+    for (let i = 0; i < cardCount; i++) {
+        cardStates.push('movable')
+    }
+    return cardStates
+}
+
+export const getIndexesOfCardsAtEmptyPositionsAtStart = (cardCount) => {
+    let indexes = [-1, -1, -1, -1, -1]
+    const number = Math.min(5, cardCount)
+    for (let i= 0; i < number; i++) {
+        indexes[i] = i
+    }
+    return indexes
+}
+
+
+export const getOccupancyDataAfterFirstDealingCards = (cardCount) => {
+    let occupancies = []
+    const number = Math.min(15, cardCount)
+    for (let i = 0; i < number; i++) {
+        occupancies.push(i)
+    }
+    return occupancies
+}
+
+
+export const isThereAPositionBelow = (cardIndex, occupancyData) => {
+    let position
+    for (let i = 0; i < occupancyData.length; i++) {
+        if (occupancyData[i] === cardIndex) {
+            position = i
+        }
+    }
+    if (position < 5) {
+        return false
+    } else {
+        return true
     }
 }
