@@ -3,10 +3,12 @@ import { View } from 'react-native'
 import ControllableComputerCard from './ControllableComputerCard'
 import { toLeftOrRightGameStackInSingleCardDealing,
     getIndexOfPossibleCardBelow,
-    getVisibleComputerCardsAtStart,
     getIndexOfCardToMoveAndTargetStack,
     getTargetPackLocation,
     getCardStatesAtStart,
+    getPlacementValidity,
+    getComputerCardLocationAfterDealing,
+    getOccupancyDataAfterFirstDealingCards,
 } from './helperFunctions.js'
 
 
@@ -18,15 +20,59 @@ const getComputerCardsPlayedStates = (cardCount) => {
     return playedStates
 }
 
+const updateGameStackTopmostCard = (side, topmostStuff, card) => {
+    if (side === 'left') {
+        topmostStuff.changeLeft(card)
+    } else {
+        topmostStuff.changeRight(card)
+    }
+}
+
+const handleCardStateChanges = (cardsAndNewStates, cardStates, setCardStates) => {
+    const updatedCardStates = [...cardStates]
+    for (let i = 0; i < cardsAndNewStates.length; i++) {
+        updatedCardStates[cardsAndNewStates[i].index] = cardsAndNewStates[i].newState
+    }
+    setCardStates(updatedCardStates)
+}
+
+const handleOccupancyDataChanges = (cardIndex, action, positionToOccupy, occupancyData, setOccupancyData) => {
+    let updatedOccupancyData = [...occupancyData]
+    let locationToFree
+    for (let j = 0; j < updatedOccupancyData.length; j++) {
+        if (updatedOccupancyData[j] === cardIndex) {
+            locationToFree = j
+        }
+    }
+    updatedOccupancyData[locationToFree] = -1
+    if (action === 'occupy') {
+        updatedOccupancyData[positionToOccupy] = cardIndex
+    }
+    setOccupancyData(updatedOccupancyData)
+}
+
+const getCurrentPosition = (cardIndex, occupancyData) => {
+    let position
+    for (let i = 0; i < occupancyData.length; i++) {
+        if (occupancyData[i] === cardIndex) {
+            position = i
+        }
+    }
+    return position
+}
+
+
+
 
 const ComputerCards = React.forwardRef((props, ref) => {
 
     const [computerCards] = useState(props.computerCards)
     const [cardReferences] = useState(computerCards.map(card => React.createRef()))
     const [indexDealNext, setIndexDealNext] = useState(props.computerCards.length > 15 ? 15 : 100)
-    const [visibleCards, setVisibleCards] = useState(getVisibleComputerCardsAtStart(computerCards.length))
+    // const [visibleCards, setVisibleCards] = useState(getVisibleComputerCardsAtStart(computerCards.length))
     const [playedStates, setPlayedStates] = useState(getComputerCardsPlayedStates(props.computerCards.length))
     const [cardStates, setCardStates] = useState(getCardStatesAtStart(props.computerCards.length))
+    const [occupancyData, setOccupancyData] = useState(getOccupancyDataAfterFirstDealingCards(props.computerCards.length))
     const timing = props.unitsAndLocations.timing
 
     useEffect(() => {
@@ -61,46 +107,63 @@ const ComputerCards = React.forwardRef((props, ref) => {
             cardReferences[indexDealNext].current.moveAndPossiblyFlipWithDelay(timing.moveDurationDealing, timing.flipDurationDealing)
             setTimeout(() => {
                 const toWhichStack = toLeftOrRightGameStackInSingleCardDealing('left', indexDealNext, computerCards.length)
-                if (toWhichStack === 'right')  {
-                    props.topmostStuff.changeRight(computerCards[indexDealNext])
-                } else {
-                    props.topmostStuff.changeLeft(computerCards[indexDealNext])
-                }
+                updateGameStackTopmostCard(toWhichStack, props.topmostStuff, computerCards[indexDealNext])
+                handleCardStateChanges([{ index: indexDealNext, newState: 'null' }], cardStates, setCardStates)
                 setIndexDealNext(indexDealNext + 1)
             }, timing.moveDurationDealing + timing.flipDurationDealing)
         }
     }
 
     const performComputerCardMoveIfPossible = () => {
-        const indexOfCardToMove = getIndexOfCardToMoveAndTargetStack(computerCards, visibleCards, props.topmostStuff.valueLeft, props.topmostStuff.valueRight)
-        // console.log('indexOfCardToMove',indexOfCardToMove)
+        const indexOfCardToMove = getIndexOfCardToMoveAndTargetStack(computerCards, occupancyData, props.topmostStuff.valueLeft, props.topmostStuff.valueRight)
+        // console.log('indexOfCardToMove', indexOfCardToMove)
+        // console.log(computerCards[indexOfCardToMove.cardIndex])
         if (indexOfCardToMove.cardIndex !== -1) {
             const targetPackLocation = getTargetPackLocation(indexOfCardToMove.target, props.unitsAndLocations.unit, props.unitsAndLocations.spacing)
-            // console.log('targetPackLocation',targetPackLocation)
-            cardReferences[indexOfCardToMove.cardIndex].current.moveAndNull(targetPackLocation, true)
-            //puuttuu vielä se, että palautetaan takaisin omalle paikalleen, mikäli pelaaja on jo
-            // ehtinyt tässä välissä tuomaan kortin pinoon
+            // cardReferences[indexOfCardToMove.cardIndex].current.moveAndNull(targetPackLocation, true)
+            cardReferences[indexOfCardToMove.cardIndex].current.moveCardToLocation(targetPackLocation, timing.moveDurationComputerGaming)
             setTimeout(() => {
-                if (indexOfCardToMove.target === 'right')  {
-                    props.topmostStuff.changeRight(computerCards[indexOfCardToMove.cardIndex])
+                const placementIsStillValid = getPlacementValidity(computerCards[indexOfCardToMove.cardIndex], indexOfCardToMove.target, props.topmostStuff)
+                // console.log('placementIsStillValid', placementIsStillValid)
+                // console.log('left', props.topmostStuff.valueLeft, 'right', props.topmostStuff.valueRight)
+                // console.log('card value', computerCards[indexOfCardToMove.cardIndex].value)
+                // console.log('indexOfCardToMove.cardIndex', indexOfCardToMove.cardIndex)
+                if (placementIsStillValid) {
+                    const currentPosition = getCurrentPosition(indexOfCardToMove.cardIndex, occupancyData)
+                    updateGameStackTopmostCard(indexOfCardToMove.target, props.topmostStuff, computerCards[indexOfCardToMove.cardIndex])
+                    handleCardStateChanges([{ index: indexOfCardToMove.cardIndex, newState: 'null' }], cardStates, setCardStates)
+                    handleOccupancyDataChanges(indexOfCardToMove.cardIndex, 'vacate', 'none', occupancyData, setOccupancyData)
+                    const indexOfCardBelow = getIndexOfPossibleCardBelow(indexOfCardToMove.cardIndex)
+                    if (currentPosition > 4 && indexOfCardBelow !== -1) {
+                        cardReferences[indexOfCardBelow].current.flipOnly(600)
+                        setTimeout(() => {
+                            handleCardStateChanges([{ index: indexOfCardToMove.cardIndex, newState: 'null' }, { index: indexOfCardBelow, newState: 'movable' }], cardStates, setCardStates)
+                        }, 1500)
+                    }
                 } else {
-                    props.topmostStuff.changeLeft(computerCards[indexOfCardToMove.cardIndex])
+                    const location = getComputerCardLocationAfterDealing(indexOfCardToMove.cardIndex, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.computerCards.length)
+                    cardReferences[indexOfCardToMove.cardIndex].current.moveCardToLocation(location)
                 }
-                let updatedVisibleCards = visibleCards.filter(cardIndex => cardIndex !== indexOfCardToMove.cardIndex)
-                const indexOfCardBelow = getIndexOfPossibleCardBelow(indexOfCardToMove.cardIndex)
-                if (indexOfCardBelow !== -1) {
-                    updatedVisibleCards.push(indexOfCardBelow)
-                }
-                setVisibleCards(updatedVisibleCards)
-            }, 1000)
-            setTimeout(() => {
-                flipPossibleCardBelow(indexOfCardToMove.cardIndex)
-            }, 1500)
+            }, timing.moveDurationComputerGaming)
+
+            // setTimeout(() => {
+            //     // updateGameStackTopmostCard(indexOfCardToMove.target, props.topmostStuff, computerCards[indexOfCardToMove.cardIndex])
+            //     let updatedVisibleCards = visibleCards.filter(cardIndex => cardIndex !== indexOfCardToMove.cardIndex)
+            //     const indexOfCardBelow = getIndexOfPossibleCardBelow(indexOfCardToMove.cardIndex)
+            //     if (indexOfCardBelow !== -1) {
+            //         updatedVisibleCards.push(indexOfCardBelow)
+            //     }
+            //     setVisibleCards(updatedVisibleCards)
+            // }, 1000)
+            // setTimeout(() => {
+            //     flipPossibleCardBelow(indexOfCardToMove.cardIndex)
+            // }, 1500)
 
         }
 
     }
 
+    // console.table(cardStates)
 
     useImperativeHandle(ref, () => {
         return { dealSolitaireCards, dealSingleCard, performComputerCardMoveIfPossible }

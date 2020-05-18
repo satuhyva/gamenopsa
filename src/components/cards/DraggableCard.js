@@ -59,7 +59,7 @@ const DraggableCard = React.forwardRef((props, ref) => {
     const handleReleasedCard = (releaseX, releaseY) => {
 
         let returnCard = true
-        // dealing with possible release of card on either of the middle game stacks
+
         const whatStackCardWasReleasedOn = whatStackWasReleasedOn(releaseX, releaseY, props.unitsAndLocations.unit, props.unitsAndLocations.spacing)
         if (whatStackCardWasReleasedOn !== 'none') {
             const valueIsOK = valueIsOKforPlacingOntoStack(whatStackCardWasReleasedOn, props.topmostStuff.valueLeft, props.topmostStuff.valueRight, props.card)
@@ -73,7 +73,6 @@ const DraggableCard = React.forwardRef((props, ref) => {
         }
 
         const whatEmptyPositionTheCardWasReleasedOn = whatEmptyPositionWasReleasedOn(releaseX, releaseY, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.occupancyData)
-
         if (whatEmptyPositionTheCardWasReleasedOn !== 'none') {
             moveCardToEmptyPosition(animatedDraggable, whatEmptyPositionTheCardWasReleasedOn, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.startLocation)
             setTimeout(() => {
@@ -87,7 +86,6 @@ const DraggableCard = React.forwardRef((props, ref) => {
             return
         }
 
-        // otherwise return the card to original position
         if (returnCard) {
             returnCardToStartDragPosition(animatedDraggable, updatedLocation)
         }

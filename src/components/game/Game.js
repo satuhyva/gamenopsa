@@ -44,6 +44,10 @@ const Game = (props) => {
     }
 
 
+    const computerPlay2 = () => {
+        referenceComputerCards.current.performComputerCardMoveIfPossible()
+    }
+
     const computerPlay = () => {
         setInterval(() => {
             referenceComputerCards.current.performComputerCardMoveIfPossible()

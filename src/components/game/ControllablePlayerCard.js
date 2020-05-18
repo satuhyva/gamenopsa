@@ -6,15 +6,9 @@ import { getPlayerCardLocationAfterDealing, getPlayerCardStartLocation, getCardF
 
 const ControllablePlayerCard = React.forwardRef((props, ref) => {
 
-    const [cardState, setCardState] = useState('movable')
     const [locationAtStart] = useState(getPlayerCardStartLocation(props.unitsAndLocations.unit, props.unitsAndLocations.spacing))
     const [locationAfterDealing] = useState(getPlayerCardLocationAfterDealing(props.index, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.cardCount))
     const [cardWillFlipAfterDealing] = useState(getCardFlipStateAfterDealing(props.index, props.cardCount))
-
-    const convertCardState = (newState) => {
-        setCardState(newState)
-    }
-
 
     if (props.cardState === 'null') {
         return null
@@ -41,12 +35,10 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
                 card={props.card}
                 endLocation={locationAfterDealing}
                 flip={cardWillFlipAfterDealing}
-                convertCardState={convertCardState}
                 unitsAndLocations={props.unitsAndLocations}
             />
         )
     }
-
 })
 
 export default ControllablePlayerCard

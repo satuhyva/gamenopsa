@@ -306,21 +306,41 @@ export const getVisibleComputerCardsAtStart = (computerCardCount) => {
 }
 
 
-export const getIndexOfCardToMoveAndTargetStack = (computerCards, visibleCardIndexes, topmostLeft, topmostRight) => {
-    let cardAndTarget = { cardIndex: -1, stack: 'none' }
+export const getIndexOfCardToMoveAndTargetStack = (computerCards, occupancyData, topmostLeft, topmostRight) => {
+
+    let visibleCardIndexes= []
+    const sets = [[0], [5,1], [9,6,2], [12,10,7,3], [14,13,11,8,4]]
     let i = 0
-    while (i < visibleCardIndexes.length) {
-        let visibleCard = computerCards[visibleCardIndexes[i]]
+    while (i < 5) {
+        let j = 0
+        let look = true
+        while (look && j < sets[i].length) {
+            if (sets[i][j] < computerCards.length) {
+                const indexOfCardAtThisPosition = occupancyData[sets[i][j]]
+                if (indexOfCardAtThisPosition !== -1) {
+                    visibleCardIndexes.push(indexOfCardAtThisPosition)
+                    look = false
+                }
+            }
+            j++
+        }
+        i++
+    }
+
+    let cardAndTarget = { cardIndex: -1, stack: 'none' }
+    let k = 0
+    while (k < visibleCardIndexes.length) {
+        let visibleCard = computerCards[visibleCardIndexes[k]]
         const leftOK =  valueIsOKforPlacingOntoStack('left', topmostLeft, topmostRight, visibleCard)
         const rightOK =  valueIsOKforPlacingOntoStack('right', topmostLeft, topmostRight, visibleCard)
         if (leftOK) {
-            cardAndTarget = { cardIndex: visibleCardIndexes[i], target: 'left' }
-            i = 100
+            cardAndTarget = { cardIndex: visibleCardIndexes[k], target: 'left' }
+            k = 100
         } else if (rightOK) {
-            cardAndTarget = { cardIndex: visibleCardIndexes[i], target: 'right' }
-            i = 100
+            cardAndTarget = { cardIndex: visibleCardIndexes[k], target: 'right' }
+            k = 100
         }
-        i++
+        k++
     }
     return cardAndTarget
 }
@@ -380,5 +400,14 @@ export const isThereAPositionBelow = (cardIndex, occupancyData) => {
         return false
     } else {
         return true
+    }
+}
+
+export const getPlacementValidity = (card, targetStack, topmostStuff) => {
+    // console.log('card, targetStack, topmostStuff', card, targetStack, topmostStuff)
+    if (targetStack === 'left') {
+        return valueIsOKforPlacingOntoStack('left', topmostStuff.valueLeft, topmostStuff.valueRight, card)
+    } else {
+        return valueIsOKforPlacingOntoStack('right', topmostStuff.valueLeft, topmostStuff.valueRight, card)
     }
 }

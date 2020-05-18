@@ -95,6 +95,7 @@ const getUnitsAndLocations = (unit, spacing) => {
         timing: {
             moveDurationDealing: 1000,
             flipDurationDealing: 600,
+            moveDurationComputerGaming: 1000,
             veryfast: 50,
             fast: 100,
             medium: 200,
