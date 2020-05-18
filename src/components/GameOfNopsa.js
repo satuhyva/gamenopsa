@@ -95,7 +95,10 @@ const getUnitsAndLocations = (unit, spacing) => {
         timing: {
             moveDurationDealing: 1000,
             flipDurationDealing: 600,
-            moveDurationComputerGaming: 1000,
+            moveDurationComputerCardGaming: 1000,
+            flipDurationGaming: 200,
+            movementFinalization: 100,
+
             veryfast: 50,
             fast: 100,
             medium: 200,
@@ -106,8 +109,7 @@ const getUnitsAndLocations = (unit, spacing) => {
     }
 }
 
-// timings:
-// flip card completely (2 halve animations together)       medium
+
 
 
 

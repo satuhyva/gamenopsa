@@ -3,16 +3,6 @@ import { Animated } from 'react-native'
 import FlippableCard from '../cards/FlippableCard'
 
 
-const moveToNewLocation = (animatedMove, startLocation, delay, newLocation, moveDuration) => {
-    Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(animatedMove, {
-            toValue: { x: newLocation.x - startLocation.x, y: newLocation.y - startLocation.y }, duration: moveDuration,
-        }),
-    ]).start()
-}
-
-
 const MovableFlippableCard = React.forwardRef((props, ref) => {
 
     const [animatedMove] = useState(new Animated.ValueXY())
@@ -56,5 +46,18 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
 })
 
 export default MovableFlippableCard
+
+
+// HELPER FUNCTIONS FOR THE COMPONENT MovableFlippableCard
+
+const moveToNewLocation = (animatedMove, startLocation, delay, newLocation, moveDuration) => {
+    Animated.sequence([
+        Animated.delay(delay),
+        Animated.timing(animatedMove, {
+            toValue: { x: newLocation.x - startLocation.x, y: newLocation.y - startLocation.y }, duration: moveDuration,
+        }),
+    ]).start()
+}
+
 
 
