@@ -30,7 +30,7 @@ const PlayerCards = React.forwardRef((props, ref) => {
         }
         setTimeout(() => {
             updateCardStatesAfterSolitaireDealing(cardStates, setCardStates)
-        }, (timing.moveDurationDealing + timing.flipDurationDealing) + 500 * playerCards.length)
+        }, (timing.moveDurationDealing + timing.flipDurationDealing) + 500 * limit)
     }
 
     const dealSingleCard = () => {
@@ -73,8 +73,15 @@ const PlayerCards = React.forwardRef((props, ref) => {
         }
     }
 
+    const returnState = () => {
+        return occupancyData
+    }
+    const returnTopmostValues = () => {
+        return { left: props.topmostStuff.valueLeft.value, right: props.topmostStuff.valueRight.value }
+    }
+
     useImperativeHandle(ref, () => {
-        return { dealSolitaireCards, dealSingleCard }
+        return { dealSolitaireCards, dealSingleCard, returnState, returnTopmostValues }
     })
 
     return (

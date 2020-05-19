@@ -76,8 +76,13 @@ const ComputerCards = React.forwardRef((props, ref) => {
     }
 
 
+    const returnState = () => {
+        return occupancyData
+    }
+
+
     useImperativeHandle(ref, () => {
-        return { dealSolitaireCards, dealSingleCard, startComputerCardMoveIfPossible }
+        return { dealSolitaireCards, dealSingleCard, startComputerCardMoveIfPossible, returnState }
     })
 
     const flipPossibleCardBelow = (cardIndex) => {

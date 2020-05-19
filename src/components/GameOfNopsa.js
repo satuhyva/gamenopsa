@@ -98,13 +98,6 @@ const getUnitsAndLocations = (unit, spacing) => {
             moveDurationComputerCardGaming: 1000,
             flipDurationGaming: 200,
             movementFinalization: 100,
-
-            veryfast: 50,
-            fast: 100,
-            medium: 200,
-            slow: 600,
-            veryslow: 1000,
-
         },
     }
 }

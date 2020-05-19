@@ -283,21 +283,9 @@ export const getComputerCardSolitaireLocation = (cardIndex, scalingUnit, spacing
 }
 
 
-// export const getVisibleComputerCardsAtStart = (computerCardCount) => {
-//     const number = Math.min(15, computerCardCount)
-//     let visibleCards = []
-//     for (let i = 0; i < number; i++) {
-//         const cardFlips = getCardFlipStateAfterDealing(i, computerCardCount)
-//         if (cardFlips) {
-//             visibleCards.push(i)
-//         }
-//     }
-//     return visibleCards
-// }
-
 
 export const getIndexOfCardToMoveAndTargetStack = (computerCards, occupancyData, topmostLeft, topmostRight) => {
-    let visibleCardIndexes= []
+    let visibleCardIndexes = []
     const sets = [[0], [5,1], [9,6,2], [12,10,7,3], [14,13,11,8,4]]
     let i = 0
     while (i < 5) {
@@ -342,13 +330,6 @@ export const getTargetPackLocation = (stack, scaleUnit, spacing) => {
     return locations.get(stack)
 }
 
-// export const isMoveStillOk = (card, side, topmostLeft, topmostRight) => {
-//     if (side === 'left') {
-//         return valueIsOKforPlacingOntoStack('left', topmostLeft, topmostRight, card)
-//     } else {
-//         valueIsOKforPlacingOntoStack('right', topmostLeft, topmostRight, card)
-//     }
-// }
 
 export const getCardStatesAtStart = (cardCount) => {
     let cardStates = []
@@ -357,15 +338,6 @@ export const getCardStatesAtStart = (cardCount) => {
     }
     return cardStates
 }
-
-// export const getIndexesOfCardsAtEmptyPositionsAtStart = (cardCount) => {
-//     let indexes = [-1, -1, -1, -1, -1]
-//     const number = Math.min(5, cardCount)
-//     for (let i= 0; i < number; i++) {
-//         indexes[i] = i
-//     }
-//     return indexes
-// }
 
 
 export const getOccupancyDataAfterFirstDealingCards = (cardCount) => {
