@@ -395,6 +395,19 @@ export const handleOccupancyDataChanges = (cardIndex, action, positionToOccupy, 
     setOccupancyData(updatedOccupancyData)
 }
 
+export const handleEmptyMoveOccupancyDataChanges = (cardMovedIndex, positionToOccupy, occupancyData, setOccupancyData) => {
+    let updatedOccupancyData = [...occupancyData]
+    let locationToFree
+    for (let j = 0; j < updatedOccupancyData.length; j++) {
+        if (updatedOccupancyData[j] === cardMovedIndex) {
+            locationToFree = j
+        }
+    }
+    updatedOccupancyData[locationToFree] = -1
+    updatedOccupancyData[positionToOccupy] = cardMovedIndex
+    setOccupancyData(updatedOccupancyData)
+}
+
 export const getCurrentPosition = (cardIndex, occupancyData) => {
     let position
     for (let i = 0; i < occupancyData.length; i++) {
@@ -411,4 +424,40 @@ export const updateGameStackTopmostCard = (side, topmostStuff, card) => {
     } else {
         topmostStuff.changeRight(card)
     }
+}
+
+
+export const getEmptyPositionAndCardToMoveThere = (occupancyData, cards) => {
+    let firstEmptyPosition = -1
+    let keepLooking = true
+    for (let i = 0; i < occupancyData.length && keepLooking; i++) {
+        if (occupancyData[i] === -1) {
+            firstEmptyPosition = i
+            keepLooking = false
+        }
+    }
+    const visibleCardToMoveIndex = getVisibleCardToMoveIndex(occupancyData, cards)
+    return { emptyPosition: firstEmptyPosition, cardToMoveIndex: visibleCardToMoveIndex }
+}
+
+const getVisibleCardToMoveIndex = (occupancies, cards) => {
+    let visibleCardIndex = -1
+    const sets = [[5], [9,6], [12,10,7], [14,13,11,8]]
+    let i = 0
+    while (i < 4) {
+        let j = 0
+        let look = true
+        while (look && j < sets[i].length) {
+            if (sets[i][j] < cards.length) {
+                const indexOfCardAtThisPosition = occupancies[sets[i][j]]
+                if (indexOfCardAtThisPosition !== -1) {
+                    visibleCardIndex = indexOfCardAtThisPosition
+                    look = false
+                }
+            }
+            j++
+        }
+        i++
+    }
+    return visibleCardIndex
 }

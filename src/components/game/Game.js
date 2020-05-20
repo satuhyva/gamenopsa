@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import PlayerCards from './PlayerCards'
 import CommonGameStacks from './CommonGameStacks'
@@ -19,9 +19,7 @@ const Game = (props) => {
     const [unitsAndLocations] = useState(props.unitsAndLocations)
     const [cumulativeLeftStack, setCumulativeLeftStack] = useState([])
     const [cumulativeRightStack, setCumulativeRightStack] = useState([])
-    const [gameIsActive, setGameIsActive] = useState(false)
-    const [computerPlayingInterval, setComputerPlayingInterval] = useState('')
-    const [newCardsNeededInterval, setNewCardsNeededInterval] = useState('')
+    const [roundIsActive, setRoundIsActive] = useState(false)
 
     const dealSolitaireCards = () => {
         referencePlayerCards.current.dealSolitaireCards()
@@ -46,10 +44,11 @@ const Game = (props) => {
         setCumulativeRightStack(updated)
     }
 
-    const gameOverEndRound = (theWinner) => {
-        setTimeout(() => {
-            props.gameRoundOver(theWinner)
-        }, 2000)
+    const endRound = (theWinner) => {
+        const gameRoundOverPlayerStateData = referencePlayerCards.current.returnGameRoundOverStateData()
+        const gameRoundOverComputerStateData = referenceComputerCards.current.returnGameRoundOverStateData()
+        const topmostValues = referencePlayerCards.current.returnTopmostValues()
+        props.gameRoundOver(theWinner, gameRoundOverPlayerStateData, gameRoundOverComputerStateData, topmostValues)
     }
 
     const topmostStuff = {
@@ -61,29 +60,45 @@ const Game = (props) => {
 
 
     const changeGameIsActiveState = () => {
-        if (!gameIsActive) {
-            setComputerPlayingInterval(
-                setInterval(() => {
-                    referenceComputerCards.current.startComputerCardMoveIfPossible()
-                }, 4000),
-            )
-            setNewCardsNeededInterval(
-                setInterval(() => {
-                    const occupancyDataPlayer = referencePlayerCards.current.returnState()
-                    const occupancyDataComputer = referenceComputerCards.current.returnState()
-                    const topmostValues = referencePlayerCards.current.returnTopmostValues()
-                    const dealingOfNewCardsIsNeeded = newCardsAreNeeded(occupancyDataPlayer, occupancyDataComputer, topmostValues.left, topmostValues.right, playerCards, computerCards)
-                    console.log('dealingOfNewCardsIsNeeded', dealingOfNewCardsIsNeeded)
-                    if (dealingOfNewCardsIsNeeded) {
-                        setGameIsActive()
-                    }
-                }, 4000),
-            )
+        const isNewCardDealingNeeded = checkIfNewCardDealingIsNeeded()
+        if (isNewCardDealingNeeded) {
+            setRoundIsActive(false)
         } else {
-            clearInterval(computerPlayingInterval)
-            clearInterval(newCardsNeededInterval)
+            setRoundIsActive(true)
+            setTimeout(() => {
+                performRecurrentComputerCardAction()
+            }, 4000)
         }
-        setGameIsActive(!gameIsActive)
+    }
+
+    const performRecurrentComputerCardAction = () => {
+        if (referenceComputerCards !== null && referenceComputerCards.current !== null) {
+            const occupancyDataComputer = referenceComputerCards.current.returnOccupancyData()
+            const couldMoveCardToEmptyPosition = couldMoveCardsToEmptyPosition(occupancyDataComputer)
+            if (couldMoveCardToEmptyPosition) {
+                referenceComputerCards.current.moveCardToEmptyPosition()
+            } else {
+                const topmostValues = referencePlayerCards.current.returnTopmostValues()
+                const occupancyDataPlayer = referencePlayerCards.current.returnOccupancyData()
+                const dealingNewCardsIsNeeded = newCardsAreNeeded(occupancyDataPlayer, occupancyDataComputer, topmostValues.left, topmostValues.right, playerCards, computerCards)
+                if (dealingNewCardsIsNeeded) {
+                    setRoundIsActive(false)
+                } else {
+                    referenceComputerCards.current.startComputerCardMoveIfPossible()
+                }
+            }
+            setTimeout(() => {
+                performRecurrentComputerCardAction()
+            }, 4000)
+        }
+    }
+
+
+    const checkIfNewCardDealingIsNeeded = () => {
+        const occupancyDataPlayer = referencePlayerCards.current.returnOccupancyData()
+        const occupancyDataComputer = referenceComputerCards.current.returnOccupancyData()
+        const topmostValues = referencePlayerCards.current.returnTopmostValues()
+        return newCardsAreNeeded(occupancyDataPlayer, occupancyDataComputer, topmostValues.left, topmostValues.right, playerCards, computerCards)
     }
 
 
@@ -98,26 +113,27 @@ const Game = (props) => {
             <PlayerCards
                 playerCards={playerCards}
                 ref={referencePlayerCards}
-                gameOverEndRound={gameOverEndRound}
+                endRound={endRound}
                 unitsAndLocations={unitsAndLocations}
                 topmostStuff={topmostStuff}
-                gameIsActive={gameIsActive}
+                roundIsActive={roundIsActive}
             />
             <ComputerCards
                 computerCards={computerCards}
                 ref={referenceComputerCards}
-                gameOverEndRound={gameOverEndRound}
+                endRound={endRound}
                 unitsAndLocations={unitsAndLocations}
                 topmostStuff={topmostStuff}
-                gameIsActive={gameIsActive}
+                roundIsActive={roundIsActive}
             />
             <ControlPanel
                 unitsAndLocations={unitsAndLocations}
                 dealSolitaireCards={dealSolitaireCards}
                 dealSingleCards={dealSingleCards}
-                gameIsActive={gameIsActive}
+                roundIsActive={roundIsActive}
                 changeGameIsActiveState={changeGameIsActiveState}
             />
+            <Text style={{ position: 'absolute', top: (0.5 + 1.5) * 1.7 * unitsAndLocations.unit, fontStyle: 'bold' }}>PROTOTYPE: PLAY VERY SLOWLY</Text>
         </View>
     )
 }
@@ -138,11 +154,16 @@ const ConnectedGame = connect(mapStateToProps, mapDispatchToProps)(Game)
 export default ConnectedGame
 
 
+
+
 // HELPER FUNCTIONS FOR COMPONENT ConnectedGame
 
 const newCardsAreNeeded = (occupancyDataPlayer, occupancyDataComputer, topmostLeft, topmostRight, playerCards, computerCards) => {
     const visiblePlayerCardValues = getVisibleCards(occupancyDataPlayer, playerCards)
     const visibleComputerCardValues = getVisibleCards(occupancyDataComputer, computerCards)
+    if (couldMoveCardsToEmptyPosition(occupancyDataPlayer) || couldMoveCardsToEmptyPosition(occupancyDataComputer)) {
+        return false
+    }
     const playerCardsNeedNewDealing = newOneCardDealingIsNeeded(visiblePlayerCardValues, topmostLeft, topmostRight)
     if (!playerCardsNeedNewDealing) {
         return false
@@ -154,15 +175,33 @@ const newCardsAreNeeded = (occupancyDataPlayer, occupancyDataComputer, topmostLe
     return true
 }
 
+const couldMoveCardsToEmptyPosition = (occupancyData) => {
+    let emptyPositionsAvailable = false
+    const number = Math.min(5, occupancyData.length)
+    for (let i = 0; i < number; i++) {
+        if (occupancyData[i] === -1) {
+            emptyPositionsAvailable = true
+        }
+    }
+    let cardAvailabelForMovingToEmptyPosition = false
+    if (emptyPositionsAvailable) {
+        const count = Math.min(9, occupancyData.length)
+        for (let i = 5; i < count; i++) {
+            if (occupancyData[i] !== -1) {
+                cardAvailabelForMovingToEmptyPosition = true
+            }
+        }
+    }
+    return cardAvailabelForMovingToEmptyPosition
+}
+
 const newOneCardDealingIsNeeded = (visibleCardValues, leftValue, rightValue) => {
     for (let i = 0; i < visibleCardValues.length; i++) {
         const leftOK = valueIsOKforPlacingOntoAStack(visibleCardValues[i], leftValue)
-        console.log('card', visibleCardValues[i], 'top', leftValue)
         if (leftOK) {
             return false
         }
         const rightOK = valueIsOKforPlacingOntoAStack(visibleCardValues[i], rightValue)
-        console.log('card', visibleCardValues[i], 'top', rightValue)
         if (rightOK) {
             return false
         }

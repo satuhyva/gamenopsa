@@ -38,7 +38,11 @@ const GameStack = ({ viewStyle, topmost }) => {
     )
 }
 
-const CommonGameStacks = ({ topmostLeft, topmostRight, unitsAndLocations }) => {
+const CommonGameStacks = ({ topmostLeft, topmostRight, unitsAndLocations, roundIsOver }) => {
+
+    if (roundIsOver) {
+        return null
+    }
 
     const cardViewStyleLeft = getCardViewStyle('left', unitsAndLocations)
     const cardViewStyleRight = getCardViewStyle('right', unitsAndLocations)

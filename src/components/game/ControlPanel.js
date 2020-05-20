@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 
 
-const ControlPanel = ({ unitsAndLocations, dealSolitaireCards, dealSingleCards, gameIsActive, changeGameIsActiveState }) => {
+const ControlPanel = ({ unitsAndLocations, dealSolitaireCards, dealSingleCards, roundIsActive, changeGameIsActiveState }) => {
 
     const [solitaireDealingDone, setSolitaireDealingDone] = useState(false)
     const [displayText, setDisplayText] = useState('deal solitaire cards')
@@ -17,18 +17,18 @@ const ControlPanel = ({ unitsAndLocations, dealSolitaireCards, dealSingleCards, 
             setTimeout(() => {
                 changeGameIsActiveState()
                 setDisplayText('continue')
-            }, 2000)
+            }, unitsAndLocations.timing.moveDurationDealing + unitsAndLocations.timing.flipDurationDealing)
         } else {
             setDisplayText('')
             dealSolitaireCards()
             setTimeout(() => {
                 setSolitaireDealingDone(true)
                 setDisplayText('continue')
-            }, 10000)
+            }, (unitsAndLocations.timing.moveDurationDealing + unitsAndLocations.timing.flipDurationDealing) + 15 * 500)
         }
     }
 
-    if (displayText === '' || gameIsActive) {
+    if (displayText === '' || roundIsActive) {
         return null
     } else {
         return (

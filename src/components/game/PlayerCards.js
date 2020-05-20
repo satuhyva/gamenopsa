@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState, useImperativeHandle, useEffect } from 'react'
 import { View } from 'react-native'
 import ControllablePlayerCard from './ControllablePlayerCard'
 import { toLeftOrRightGameStackInSingleCardDealing,
@@ -15,6 +15,7 @@ import { toLeftOrRightGameStackInSingleCardDealing,
 
 
 const PlayerCards = React.forwardRef((props, ref) => {
+
 
     const [playerCards] = useState(props.playerCards)
     const [cardReferences] = useState(playerCards.map(card => React.createRef()))
@@ -73,16 +74,30 @@ const PlayerCards = React.forwardRef((props, ref) => {
         }
     }
 
-    const returnState = () => {
+    const returnOccupancyData = () => {
         return occupancyData
+    }
+    const returnGameRoundOverStateData = () => {
+        return {
+            occupancyData: occupancyData,
+            indexDealNext: indexDealNext,
+        }
     }
     const returnTopmostValues = () => {
         return { left: props.topmostStuff.valueLeft.value, right: props.topmostStuff.valueRight.value }
     }
 
     useImperativeHandle(ref, () => {
-        return { dealSolitaireCards, dealSingleCard, returnState, returnTopmostValues }
+        return { dealSolitaireCards, dealSingleCard, returnOccupancyData, returnTopmostValues, returnGameRoundOverStateData }
     })
+
+    useEffect(() => {
+        const playerSolitaireCardsAreAllPlayed = occupancyData.every(position => position === -1)
+        if (playerSolitaireCardsAreAllPlayed) {
+            props.endRound('player')
+        }
+    },[occupancyData, props])
+
 
     return (
         <View>
@@ -129,16 +144,7 @@ const updateCardStatesAfterSolitaireDealing = (cardStates, setCardStates) => {
 
 
 
-// useEffect(() => {
-//     let gameOver = true
-//     let min = Math.min(15, playerCards.length)
-//     for (let i = 0; i < min; i++) {
-//         if (playedStates[i] === false) {
-//             gameOver = false
-//         }
-//     }
-//     if (gameOver) {
-//         props.gameOverEndRound('player')
-//     }
-// },[playedStates, playerCards.length, props])
+
+
+
 

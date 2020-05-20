@@ -24,8 +24,8 @@ const MovableFlippableCard = React.forwardRef((props, ref) => {
         }
     }
 
-    const moveCardToLocation = (location) => {
-        moveToNewLocation(animatedMove, startLocation, 0, location, 1000)
+    const moveCardToLocation = (location, duration) => {
+        moveToNewLocation(animatedMove, startLocation, 0, location, duration)
     }
 
     useImperativeHandle(ref, () => {

@@ -18,10 +18,13 @@ const GameOfNopsa = (props) => {
 
     const [winner, setWinner] = useState('none')
 
-    const gameRoundOver = (theWinner) => {
-
+    const gameRoundOver = (theWinner, gameRoundOverPlayerStateData, gameRoundOverComputerStateData, topmostValues) => {
+        // console.log('theWinner, gameRoundOverPlayerStateData, gameRoundOverComputerStateData, topmostValues')
+        // console.log(theWinner, gameRoundOverPlayerStateData, gameRoundOverComputerStateData, topmostValues)
         setWinner(theWinner)
     }
+
+
     const GameWithRounds = () => {
         if (winner === 'none') {
             return <Game scaleUnit={scaleUnit} spacing={spacing} gameRoundOver={gameRoundOver} unitsAndLocations={unitsAndLocations}/>
@@ -93,11 +96,11 @@ const getUnitsAndLocations = (unit, spacing) => {
         rightGamingStackXY: rightGamingStackXY,
         rightDealingStackXY: rightDealingStackXY,
         timing: {
-            moveDurationDealing: 1000,
-            flipDurationDealing: 600,
-            moveDurationComputerCardGaming: 1000,
+            moveDurationDealing: 700,
+            flipDurationDealing: 400,
+            moveDurationComputerCardGaming: 200,
             flipDurationGaming: 200,
-            movementFinalization: 100,
+            movementFinalization: 50,
         },
     }
 }
