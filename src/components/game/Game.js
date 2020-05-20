@@ -48,7 +48,7 @@ const Game = (props) => {
         const gameRoundOverPlayerStateData = referencePlayerCards.current.returnGameRoundOverStateData()
         const gameRoundOverComputerStateData = referenceComputerCards.current.returnGameRoundOverStateData()
         const topmostValues = referencePlayerCards.current.returnTopmostValues()
-        props.gameRoundOver(theWinner, gameRoundOverPlayerStateData, gameRoundOverComputerStateData, topmostValues)
+        props.gameRoundOver(theWinner, gameRoundOverPlayerStateData, gameRoundOverComputerStateData, topmostValues, cumulativeLeftStack, cumulativeRightStack)
     }
 
     const topmostStuff = {
