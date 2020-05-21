@@ -10,6 +10,7 @@ const ControllablePlayerCard = React.forwardRef((props, ref) => {
     const [locationAfterDealing] = useState(getPlayerCardLocationAfterDealing(props.index, props.unitsAndLocations.unit, props.unitsAndLocations.spacing, props.cardCount))
     const [cardWillFlipAfterDealing] = useState(getCardFlipStateAfterDealing(props.index, props.cardCount))
 
+
     if (props.cardState === 'null') {
         return null
     } else if (props.cardState === 'draggable') {

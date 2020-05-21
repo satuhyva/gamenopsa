@@ -49,16 +49,20 @@ const GameOfNopsa = (props) => {
             return <Winner winner={winner} unitsAndLocations={unitsAndLocations} continueToNextRound={continueToNextRound}/>
         }
     }
-
-    return (
-        <View style={styles.screen}>
-            {gameIsOn ?
+    if (gameIsOn) {
+        return (
+            <View style={styles.screen}>
                 <GameWithRounds/>
-                :
+            </View>
+        )
+    } else {
+        return (
+            <View style={styles.screen}>
                 <SetUpGame scaleUnit={scaleUnit}/>
-            }
-        </View>
-    )
+            </View>
+        )
+    }
+
 }
 
 const mapStateToProps = state => {

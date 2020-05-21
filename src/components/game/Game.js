@@ -133,7 +133,8 @@ const Game = (props) => {
                 roundIsActive={roundIsActive}
                 changeGameIsActiveState={changeGameIsActiveState}
             />
-            <Text style={{ position: 'absolute', top: (0.5 + 1.5) * 1.7 * unitsAndLocations.unit, fontStyle: 'bold' }}>PROTOTYPE: PLAY VERY SLOWLY</Text>
+            <Text style={{ position: 'absolute', top: (0.5 + 1.5) * 1.7 * unitsAndLocations.unit, left: (1/6 + 1) * unitsAndLocations.unit,
+                fontStyle: 'bold', fontSize: unitsAndLocations.unit / 2 }}>PROTOTYPE</Text>
         </View>
     )
 }

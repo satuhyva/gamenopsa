@@ -7,6 +7,8 @@ const gameReducer = (state = initialState, action) => {
         return action.data
     case 'SET_GAMEROUND_RESULTS':
         return { ...state, playerStack: action.data.playerStack, computerStack: action.data.computerStack }
+    case 'END_GAME':
+        return action.data
     default:
         return state
     }
@@ -24,6 +26,13 @@ export const setGameRoundResults = (results) => {
     return {
         type: 'SET_GAMEROUND_RESULTS',
         data: results,
+    }
+}
+
+export const endGame = () => {
+    return {
+        type: 'END_GAME',
+        data: { isOn: false },
     }
 }
 

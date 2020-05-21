@@ -16,7 +16,6 @@ import { toLeftOrRightGameStackInSingleCardDealing,
 
 const PlayerCards = React.forwardRef((props, ref) => {
 
-
     const [playerCards] = useState(props.playerCards)
     const [cardReferences] = useState(playerCards.map(card => React.createRef()))
     const [indexDealNext, setIndexDealNext] = useState(props.playerCards.length > 15 ? 15 : 100)
