@@ -9,7 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "expo": "^37.0.8",
-    "expo-cli": "^3.20.1",
+    "expo-cli": "^6.0.8",
     "g": "^2.0.1",
     "gh-pages": "^2.2.0",
     "react": "^16.13.1",
